@@ -51,19 +51,19 @@ class Game {
     await _storage.setItem('modele', json.encode(table));
   }
 
-  void ctrlAddScore(int player, int score) {
+  Future ctrlAddScore(int player, int score) async {
     _cancelList.add(player);
     var list = table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
-    // writeAll();
+    await writeAll();
   }
 
-  void ctrlCancel() {
+  void ctrlCancel() async {
     if (_cancelList.length == 0) return;
     var player = _cancelList.removeLast();
     table[player].removeLast();
-    // writeAll();
+    await writeAll();
   }
 
   void ctrlRAZ() {
