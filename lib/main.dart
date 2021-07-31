@@ -18,16 +18,33 @@ class ScorerApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('Game Scorer'),
         ),
-        body: Center(
-          child: TextButton(
-            onPressed: () {
-              Get.snackbar(
-                'Classement',
-                'Le leader est actuellement : Zardoz',
-              );
-            },
-            child: const Text('Classement'),
-          ),
+        body: Column(
+          children: [
+            Table(
+              children: [
+                TableRow(children: [
+                  TableCell(child: Text('un')),
+                  TableCell(child: Text('deux')),
+                ]),
+                TableRow(children: [
+                  TableCell(child: Text('un')),
+                  TableCell(child: Text('deux')),
+                ]),
+              ],
+            ),
+            Divider(),
+            Center(
+              child: TextButton(
+                onPressed: () {
+                  Get.snackbar(
+                    'Classement',
+                    'Le leader est actuellement : Zardoz',
+                  );
+                },
+                child: const Text('Classement'),
+              ),
+            ),
+          ],
         ),
       ),
     );
