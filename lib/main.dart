@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 void main() {
-  runApp(ScorerApp());
+  runApp(const ScorerApp());
 }
 
 class ScorerApp extends StatelessWidget {
+  const ScorerApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
@@ -14,7 +16,7 @@ class ScorerApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Game Scorer'),
+          title: const Text('Game Scorer'),
         ),
         body: Center(
           child: TextButton(
@@ -24,7 +26,7 @@ class ScorerApp extends StatelessWidget {
                 'Le leader est actuellement : Zardoz',
               );
             },
-            child: Text('Classement'),
+            child: const Text('Classement'),
           ),
         ),
       ),

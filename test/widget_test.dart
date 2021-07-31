@@ -12,7 +12,7 @@ import 'package:getx_scorer/main.dart';
 void main() {
   testWidgets('Snackbar test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(ScorerApp());
+    await tester.pumpWidget(const ScorerApp());
 
     // Verify that just one 'Classement' widget is on the screen
     expect(find.text('Classement'), findsOneWidget);
