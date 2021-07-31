@@ -38,7 +38,7 @@ class Game {
   }
 
   /// Cancel the last [ctrlAddScore] method call.
-  void ctrlCancel() async {
+  Future ctrlCancel() async {
     if (_cancelList.length == 0) return;
     var player = _cancelList.removeLast();
     table[player].removeLast();

@@ -19,5 +19,7 @@ void main() async {
     assert(game.count == 1);
     await game.ctrlAddScore(1, 33);
     assert(game.count == 2);
+    await game.ctrlCancel();
+    assert(game.count == 1);
   });
 }
