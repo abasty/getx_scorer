@@ -24,18 +24,17 @@ class ScorerApp extends StatelessWidget {
         ),
         body: Column(
           children: [
-            const ScoreTable(),
-            const Divider(),
+            const Expanded(child: ScoreTable()),
             Center(
               child: TextButton(
                 onPressed: () {
-                  game.ctrlAddScore(0, 10);
+                  game.ctrlCancel();
                   Get.snackbar(
-                    'Classement',
-                    'Le leader est actuellement : Zardoz',
+                    'Annuler',
+                    'Annule la dernière entrée.',
                   );
                 },
-                child: const Text('Classement'),
+                child: const Text('Annuler'),
               ),
             ),
           ],
@@ -52,30 +51,42 @@ class ScoreTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final game = Get.find<Game>();
-
-    return DataTable(
-      columns: [
-        for (var name in game.players)
-          DataColumn(
-            label: Text(
-              name,
-              style: const TextStyle(
-                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
-            ),
-          ),
-      ],
-      rows: <DataRow>[
-        for (var row = 0; row < game.rowCount; row++)
-          DataRow(
-            cells: [
-              for (var column = 0; column < game.columnCount; column++)
-                DataCell(
-                  Text('${game.getScore(column, row)[0]}'),
+    return GetBuilder<Game>(
+      builder: (game) => SingleChildScrollView(
+        child: DataTable(
+          columns: [
+            for (int column = 0; column < game.columnCount; column++)
+              DataColumn(
+                numeric: true,
+                label: TextButton(
+                  onPressed: () {
+                    game.ctrlAddScore(column, 10);
+                  },
+                  child: Text(
+                    game.players[column],
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
-            ],
-          ),
-      ],
+              ),
+          ],
+          rows: <DataRow>[
+            for (int row = 0; row < game.rowCount; row++)
+              DataRow(
+                cells: [
+                  for (int column = 0; column < game.columnCount; column++)
+                    DataCell(
+                      Builder(
+                        builder: (context) {
+                          var score = game.getScore(column, row)[0];
+                          return Text('${score > -1 ? score : '-'}');
+                        },
+                      ),
+                    ),
+                ],
+              ),
+          ],
+        ),
+      ),
     );
   }
 }

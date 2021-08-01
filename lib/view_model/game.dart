@@ -39,6 +39,7 @@ class Game extends GetxController {
     var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
+    update();
     await writeAll();
   }
 
@@ -47,6 +48,7 @@ class Game extends GetxController {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     _table[player].removeLast();
+    update();
     await writeAll();
   }
 
