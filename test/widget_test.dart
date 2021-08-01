@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
-import 'package:getx_scorer/main.dart';
+import 'package:getx_scorer/view/game_screen.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 void main() {
@@ -16,7 +16,9 @@ void main() {
 
   testWidgets('Snackbar test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const ScorerApp());
+    await tester.pumpWidget(
+      const GetMaterialApp(home: GameScreen()),
+    );
 
     // Verify that just one 'Classement' widget is on the screen
     expect(find.text('Annuler'), findsOneWidget);
