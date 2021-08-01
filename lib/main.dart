@@ -65,8 +65,8 @@ class ScoreTable extends StatelessWidget {
           DataRow(
             cells: [
               for (var column = 0; column < game.columnCount; column++)
-                const DataCell(
-                  Text('toto'),
+                DataCell(
+                  Text('${game.getScore(column, row)[0]}'),
                 ),
             ],
           ),
