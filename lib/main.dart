@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_scorer/view_model/game.dart';
 
 void main() {
   runApp(const ScorerApp());
@@ -20,22 +21,12 @@ class ScorerApp extends StatelessWidget {
         ),
         body: Column(
           children: [
-            Table(
-              children: [
-                TableRow(children: [
-                  TableCell(child: Text('un')),
-                  TableCell(child: Text('deux')),
-                ]),
-                TableRow(children: [
-                  TableCell(child: Text('un')),
-                  TableCell(child: Text('deux')),
-                ]),
-              ],
-            ),
-            Divider(),
+            const ScoreTable(),
+            const Divider(),
             Center(
               child: TextButton(
                 onPressed: () {
+                  game.ctrlAddScore(0, 10);
                   Get.snackbar(
                     'Classement',
                     'Le leader est actuellement : Zardoz',
@@ -47,6 +38,39 @@ class ScorerApp extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ScoreTable extends StatelessWidget {
+  const ScoreTable({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable(
+      columns: [
+        for (var name in game.players)
+          DataColumn(
+            label: Text(
+              name,
+              style: const TextStyle(
+                  fontStyle: FontStyle.italic, fontWeight: FontWeight.bold),
+            ),
+          ),
+      ],
+      rows: <DataRow>[
+        for (var row = 0; row < game.rowCount; row++)
+          DataRow(
+            cells: [
+              for (var column = 0; column < game.columnCount; column++)
+                const DataCell(
+                  Text('toto'),
+                ),
+            ],
+          ),
+      ],
     );
   }
 }

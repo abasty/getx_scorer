@@ -16,10 +16,10 @@ void main() async {
       sum += game.getScore(i, 0)[1];
     }
     assert(sum == 200);
-    assert(game.count == 1);
+    assert(game.rowCount == 1);
     await game.ctrlAddScore(1, 33);
-    assert(game.count == 2);
+    assert(game.rowCount == 2);
     await game.ctrlCancel();
-    assert(game.count == 1);
+    assert(game.rowCount == 1);
   });
 }

@@ -3,10 +3,10 @@ import 'dart:math';
 
 import 'package:localstorage/localstorage.dart';
 
-/// A game defined by an [ID] and a list of [players].
+/// A game defined by an [id] and a list of [players].
 class Game {
-  /// The [ID] of the game.
-  final String ID;
+  /// The [id] of the game.
+  final String id;
 
   /// List of players (names).
   final List<String> players;
@@ -20,13 +20,16 @@ class Game {
   final _storage = LocalStorage('points.json');
 
   /// Create a new game given an ID and a list of players.
-  Game(this.ID, this.players) : table = players.map((e) => <int>[]).toList();
+  Game(this.id, this.players) : table = players.map((e) => <int>[]).toList();
 
   /// [cancelable] is true iff the cancel list is not empty.
   get cancelable => _cancelList.isNotEmpty;
 
-  /// [count] is the maximum number of elements in all columns.
-  get count => table.map((c) => c.length).reduce(max);
+  /// [rowCount] is the maximum number of elements in all columns.
+  int get rowCount => table.map((c) => c.length).reduce(max);
+
+  /// [columnCount] is the number of column (i.e. players) in the game
+  int get columnCount => players.length;
 
   /// Add a score to the player score column.
   Future ctrlAddScore(int player, int score) async {
@@ -39,7 +42,7 @@ class Game {
 
   /// Cancel the last [ctrlAddScore] method call.
   Future ctrlCancel() async {
-    if (_cancelList.length == 0) return;
+    if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     table[player].removeLast();
     await writeAll();
@@ -87,3 +90,5 @@ class Game {
     await _storage.setItem('modele', json.encode(table));
   }
 }
+
+var game = Game('ID', ['Véro', 'Alain', 'Martine']);
