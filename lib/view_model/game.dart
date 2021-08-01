@@ -13,20 +13,20 @@ class Game {
 
   /// List of score columns. Each column is linked with a player in the
   /// [players] list.
-  final List<List<int>> table;
+  final List<List<int>> _table;
 
   final List<int> _cancelList = [];
 
   final _storage = LocalStorage('points.json');
 
   /// Create a new game given an ID and a list of players.
-  Game(this.id, this.players) : table = players.map((e) => <int>[]).toList();
+  Game(this.id, this.players) : _table = players.map((e) => <int>[]).toList();
 
   /// [cancelable] is true iff the cancel list is not empty.
   get cancelable => _cancelList.isNotEmpty;
 
   /// [rowCount] is the maximum number of elements in all columns.
-  int get rowCount => table.map((c) => c.length).reduce(max);
+  int get rowCount => _table.map((c) => c.length).reduce(max);
 
   /// [columnCount] is the number of column (i.e. players) in the game
   int get columnCount => players.length;
@@ -34,7 +34,7 @@ class Game {
   /// Add a score to the player score column.
   Future ctrlAddScore(int player, int score) async {
     _cancelList.add(player);
-    var list = table[player];
+    var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
     await writeAll();
@@ -44,26 +44,26 @@ class Game {
   Future ctrlCancel() async {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
-    table[player].removeLast();
+    _table[player].removeLast();
     await writeAll();
   }
 
   /// Empty score table and cancel list.
   void ctrlRAZ() {
-    table.clear();
+    _table.clear();
     _cancelList.clear();
   }
 
   /// Gets a player line of score. Returns two values : the absolute score value
   /// for the line and the delta with the previous line.
   List<int> getScore(int player, int line) {
-    var length = table[player].length;
+    var length = _table[player].length;
     if (line >= length) return [-1, 0];
     return [
-      table[player][line],
+      _table[player][line],
       line == 0
-          ? table[player][line]
-          : table[player][line] - table[player][line - 1]
+          ? _table[player][line]
+          : _table[player][line] - _table[player][line - 1]
     ];
   }
 
@@ -72,7 +72,7 @@ class Game {
     await _storage.ready;
     var map = json.decode(await _storage.getItem('modele') as String);
     List<List<int>> tmp;
-    table.clear();
+    _table.clear();
     if (map is List) {
       tmp = map
           .map<List<int>>((j) =>
@@ -81,13 +81,13 @@ class Game {
     } else {
       tmp = players.map((e) => <int>[]).toList();
     }
-    table.addAll(tmp);
+    _table.addAll(tmp);
   }
 
   /// Write the score table to a file.
   Future<void> writeAll() async {
     await _storage.ready;
-    await _storage.setItem('modele', json.encode(table));
+    await _storage.setItem('modele', json.encode(_table));
   }
 }
 
