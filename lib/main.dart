@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 void main() {
+  Get.put(Game('ID', ['Véro', 'Alain', 'Martine']));
   runApp(const ScorerApp());
 }
 
@@ -11,6 +12,8 @@ class ScorerApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final game = Get.find<Game>();
+
     return GetMaterialApp(
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -49,6 +52,8 @@ class ScoreTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final game = Get.find<Game>();
+
     return DataTable(
       columns: [
         for (var name in game.players)

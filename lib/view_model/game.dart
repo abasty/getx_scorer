@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:localstorage/localstorage.dart';
+import 'package:get/get.dart';
 
 /// A game defined by an [id] and a list of [players].
-class Game {
+class Game extends GetxController {
   /// The [id] of the game.
   final String id;
 
@@ -13,14 +14,15 @@ class Game {
 
   /// List of score columns. Each column is linked with a player in the
   /// [players] list.
-  final List<List<int>> _table;
+  final RxList<List<int>> _table;
 
   final List<int> _cancelList = [];
 
   final _storage = LocalStorage('points.json');
 
   /// Create a new game given an ID and a list of players.
-  Game(this.id, this.players) : _table = players.map((e) => <int>[]).toList();
+  Game(this.id, this.players)
+      : _table = players.map((e) => <int>[]).toList().obs;
 
   /// [cancelable] is true iff the cancel list is not empty.
   get cancelable => _cancelList.isNotEmpty;
@@ -90,5 +92,3 @@ class Game {
     await _storage.setItem('modele', json.encode(_table));
   }
 }
-
-var game = Game('ID', ['Véro', 'Alain', 'Martine']);

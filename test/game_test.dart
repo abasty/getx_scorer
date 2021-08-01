@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 void main() async {
-  var game = Game('ID1', ['toto', 'tata', 'titi']);
+  var game = Get.put(Game('ID', ['Véro', 'Alain', 'Martine']));
   test('Game()', () {
     assert(listEquals(game.getScore(0, 0), [-1, 0]));
   });

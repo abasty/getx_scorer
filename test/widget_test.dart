@@ -6,10 +6,14 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:flutter_test/flutter_test.dart';
-
+import 'package:get/get.dart';
 import 'package:getx_scorer/main.dart';
+import 'package:getx_scorer/view_model/game.dart';
 
 void main() {
+  // ignore: unused_local_variable
+  var game = Get.put(Game('ID', ['Véro', 'Alain', 'Martine']));
+
   testWidgets('Snackbar test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const ScorerApp());
