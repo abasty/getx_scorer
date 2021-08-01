@@ -52,41 +52,62 @@ class ScoreTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<Game>(
-      builder: (game) => SingleChildScrollView(
-        child: DataTable(
-          columns: [
-            for (int column = 0; column < game.columnCount; column++)
-              DataColumn(
-                numeric: true,
-                label: TextButton(
-                  onPressed: () {
-                    game.ctrlAddScore(column, 10);
-                  },
-                  child: Text(
-                    game.players[column],
-                    style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-          ],
-          rows: <DataRow>[
-            for (int row = 0; row < game.rowCount; row++)
-              DataRow(
-                cells: [
-                  for (int column = 0; column < game.columnCount; column++)
-                    DataCell(
-                      Builder(
-                        builder: (context) {
-                          var score = game.getScore(column, row)[0];
-                          return Text('${score > -1 ? score : '-'}');
-                        },
+      builder: (game) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                for (int p = 0; p < game.columnCount; p++)
+                  Container(
+                    width: 96,
+                    height: 48,
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: () {
+                        game.ctrlAddScore(p, 10);
+                        game.scrollController.jumpTo(
+                            game.scrollController.position.maxScrollExtent);
+                      },
+                      child: Text(
+                        game.players[p],
+                        style: const TextStyle(fontSize: 20.0),
                       ),
                     ),
-                ],
+                  )
+              ],
+            ),
+            Expanded(
+              child: ListView.builder(
+                controller: game.scrollController,
+                scrollDirection: Axis.vertical,
+                itemCount: game.rowCount,
+                itemBuilder: (context, row) {
+                  return Row(
+                    children: [
+                      for (int p = 0; p < game.columnCount; p++)
+                        Container(
+                          width: 96,
+                          height: 48,
+                          alignment: Alignment.centerRight,
+                          color: row.isEven ? Colors.green[50] : Colors.white,
+                          child: Builder(
+                            builder: (context) {
+                              var score = game.getScore(p, row)[0];
+                              return Text(
+                                '${score < 0 ? "-" : score}',
+                                style: const TextStyle(fontSize: 20.0),
+                              );
+                            },
+                          ),
+                        )
+                    ],
+                  );
+                },
               ),
+            ),
           ],
-        ),
-      ),
+        );
+      },
     );
   }
 }

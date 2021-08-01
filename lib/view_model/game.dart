@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +16,9 @@ class Game extends GetxController {
   /// List of score columns. Each column is linked with a player in the
   /// [players] list.
   final RxList<List<int>> _table;
+
+  /// The croll controller
+  final scrollController = ScrollController();
 
   final List<int> _cancelList = [];
 

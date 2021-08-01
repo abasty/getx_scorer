@@ -19,18 +19,18 @@ void main() {
     await tester.pumpWidget(const ScorerApp());
 
     // Verify that just one 'Classement' widget is on the screen
-    expect(find.text('Classement'), findsOneWidget);
-    // Tap the 'Classement' button.
-    await tester.tap(find.text('Classement'));
+    expect(find.text('Annuler'), findsOneWidget);
+    // Tap the 'Annuler' button.
+    await tester.tap(find.text('Annuler'));
     // Schedule animation
     await tester.pump();
     // Start animation
     await tester.pump();
     // Verify that our snackbar is displayed.
-    expect(find.text('Classement'), findsNWidgets(2));
+    expect(find.text('Annuler'), findsNWidgets(2));
     // Wait default animation time
     await tester.pump(const Duration(seconds: 4));
-    // Verify that just one 'Classement' widget is on the screen
-    expect(find.text('Classement'), findsOneWidget);
+    // Verify that just one 'Annuler' widget is on the screen
+    expect(find.text('Annuler'), findsOneWidget);
   });
 }
