@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:localstorage/localstorage.dart';
 import 'package:get/get.dart';
+import 'package:localstorage/localstorage.dart';
 
 /// A game defined by an [id] and a list of [players].
 class Game extends GetxController {
@@ -29,7 +29,7 @@ class Game extends GetxController {
       : _table = players.map((e) => <int>[]).toList().obs;
 
   /// [cancelable] is true iff the cancel list is not empty.
-  get cancelable => _cancelList.isNotEmpty;
+  bool get cancelable => _cancelList.isNotEmpty;
 
   /// [rowCount] is the maximum number of elements in all columns.
   int get rowCount => _table.map((c) => c.length).reduce(max);
@@ -59,7 +59,9 @@ class Game extends GetxController {
   /// Empty score table and cancel list.
   void ctrlRAZ() {
     _table.clear();
+    _table.addAll(players.map((e) => <int>[]).toList().obs);
     _cancelList.clear();
+    update();
   }
 
   /// Gets a player line of score. Returns two values : the absolute score value

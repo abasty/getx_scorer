@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_scorer/view_model/game.dart';
+import '../view_model/game.dart';
 
 class GameScreen extends StatelessWidget {
   const GameScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final game = Get.find<Game>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Game Scorer'),
@@ -16,17 +14,21 @@ class GameScreen extends StatelessWidget {
       body: Column(
         children: [
           const Expanded(child: ScoreTable()),
-          Center(
-            child: TextButton(
-              onPressed: () {
-                game.ctrlCancel();
-                Get.snackbar(
-                  'Annuler',
-                  'Annule la dernière entrée.',
-                );
-              },
-              child: const Text('Annuler'),
-            ),
+          GetBuilder<Game>(
+            builder: (game) {
+              return Row(
+                children: [
+                  TextButton(
+                    onPressed: game.cancelable ? () => game.ctrlCancel() : null,
+                    child: const IconText('ANNULER', Icons.cancel),
+                  ),
+                  TextButton(
+                    onPressed: game.cancelable ? () => game.ctrlRAZ() : null,
+                    child: const IconText('RAZ', Icons.clear_all),
+                  ),
+                ],
+              );
+            },
           ),
         ],
       ),
@@ -98,6 +100,27 @@ class ScoreTable extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class IconText extends StatelessWidget {
+  final String _title;
+  final IconData _iconData;
+
+  const IconText(this._title, this._iconData, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 120,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(_iconData),
+          Text(_title),
+        ],
+      ),
     );
   }
 }
