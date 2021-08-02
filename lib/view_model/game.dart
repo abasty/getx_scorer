@@ -3,10 +3,12 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:localstorage/localstorage.dart';
+import 'package:get_storage/get_storage.dart';
 
 /// A game defined by an [id] and a list of [players].
 class Game extends GetxController {
+  static const _tableKey = 'table';
+
   /// The [id] of the game.
   final String id;
 
@@ -17,16 +19,22 @@ class Game extends GetxController {
   /// [players] list.
   final RxList<List<int>> _table;
 
-  /// The croll controller
+  /// The scroll controller
   final scrollController = ScrollController();
 
   final List<int> _cancelList = [];
 
-  final _storage = LocalStorage('points.json');
+  final _storage = GetStorage('getx_scorer');
 
   /// Create a new game given an ID and a list of players.
   Game(this.id, this.players)
       : _table = players.map((e) => <int>[]).toList().obs;
+
+  @override
+  void onInit() async {
+    super.onInit();
+    print(_storage.read(_tableKey));
+  }
 
   /// [cancelable] is true iff the cancel list is not empty.
   bool get cancelable => _cancelList.isNotEmpty;
@@ -43,8 +51,8 @@ class Game extends GetxController {
     var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
+    _storage.write(_tableKey, jsonEncode(_table));
     update();
-    await writeAll();
   }
 
   /// Cancel the last [ctrlAddScore] method call.
@@ -52,8 +60,8 @@ class Game extends GetxController {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     _table[player].removeLast();
+    _storage.write(_tableKey, _table);
     update();
-    await writeAll();
   }
 
   /// Empty score table and cancel list.
@@ -61,6 +69,7 @@ class Game extends GetxController {
     _table.clear();
     _table.addAll(players.map((e) => <int>[]).toList().obs);
     _cancelList.clear();
+    _storage.write(_tableKey, _table);
     update();
   }
 
@@ -78,9 +87,9 @@ class Game extends GetxController {
   }
 
   /// Read score table from file.
-  Future<void> readAll() async {
-    await _storage.ready;
-    var map = json.decode(await _storage.getItem('modele') as String);
+  /*Future<void> readAll() async {
+    await _storageOld.ready;
+    var map = json.decode(await _storageOld.getItem('modele') as String);
     List<List<int>> tmp;
     _table.clear();
     if (map is List) {
@@ -92,11 +101,6 @@ class Game extends GetxController {
       tmp = players.map((e) => <int>[]).toList();
     }
     _table.addAll(tmp);
-  }
+  }*/
 
-  /// Write the score table to a file.
-  Future<void> writeAll() async {
-    await _storage.ready;
-    await _storage.setItem('modele', json.encode(_table));
-  }
 }
