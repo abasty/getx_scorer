@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:get_storage/get_storage.dart';
 
 /// A game defined by an [id] and a list of [players].
 class Game extends GetxController {
+  static const storageName = 'getx_scorer';
   static const _tableKey = 'table';
 
   /// The [id] of the game.
@@ -24,7 +24,7 @@ class Game extends GetxController {
 
   final List<int> _cancelList = [];
 
-  final _storage = GetStorage('getx_scorer');
+  final _storage = GetStorage(storageName);
 
   /// Create a new game given an ID and a list of players.
   Game(this.id, this.players)
@@ -33,7 +33,15 @@ class Game extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    print(_storage.read(_tableKey));
+    var tableDynamic = _storage.read(_tableKey) as List;
+    var tableInt = tableDynamic.map((player) {
+      var scores = (player as List).map((score) {
+        return score as int;
+      }).toList();
+      return scores;
+    }).toList();
+    _table.clear();
+    _table.addAll(tableInt);
   }
 
   /// [cancelable] is true iff the cancel list is not empty.
@@ -51,7 +59,7 @@ class Game extends GetxController {
     var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
-    _storage.write(_tableKey, jsonEncode(_table));
+    _storage.write(_tableKey, _table); //jsonEncode(_table));
     update();
   }
 
@@ -85,22 +93,4 @@ class Game extends GetxController {
           : _table[player][line] - _table[player][line - 1]
     ];
   }
-
-  /// Read score table from file.
-  /*Future<void> readAll() async {
-    await _storageOld.ready;
-    var map = json.decode(await _storageOld.getItem('modele') as String);
-    List<List<int>> tmp;
-    _table.clear();
-    if (map is List) {
-      tmp = map
-          .map<List<int>>((j) =>
-              j is List ? j.map<int>((p) => p is int ? p : 0).toList() : [])
-          .toList();
-    } else {
-      tmp = players.map((e) => <int>[]).toList();
-    }
-    _table.addAll(tmp);
-  }*/
-
 }
