@@ -33,14 +33,20 @@ class Game extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    var tableDynamic = _storage.read(_tableKey) as List;
-    var tableInt = tableDynamic.map((player) {
-      var scores = (player as List).map((score) {
-        return score as int;
-      }).toList();
-      return scores;
-    }).toList();
     _table.clear();
+    List<List<int>> tableInt;
+    var tableRaw = _storage.read(_tableKey);
+    if (tableRaw is List) {
+      tableInt = tableRaw.map((player) {
+        var scores = (player as List).map((score) {
+          return score as int;
+        }).toList();
+        return scores;
+      }).toList();
+    } else {
+      tableInt = players.map((e) => <int>[]).toList();
+    }
+
     _table.addAll(tableInt);
   }
 
