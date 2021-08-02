@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 class Game extends GetxController {
   static const storageName = 'getx_scorer';
   static const _tableKey = 'table';
+  static const _playersKey = 'players';
 
   /// The [id] of the game.
   final String id;
@@ -30,9 +31,23 @@ class Game extends GetxController {
   Game(this.id, this.players)
       : _table = players.map((e) => <int>[]).toList().obs;
 
+  /// Read players and score table from storage, if possible
   @override
   void onInit() async {
     super.onInit();
+
+    /// Read players
+    var playersRaw = _storage.read(_playersKey);
+    if (playersRaw is List) {
+      List<String> playersString =
+          playersRaw.map((name) => name as String).toList();
+      players.clear();
+      players.addAll(playersString);
+    } else {
+      _storage.write(_playersKey, players);
+    }
+
+    /// Read scores table
     _table.clear();
     List<List<int>> tableInt;
     var tableRaw = _storage.read(_tableKey);
@@ -46,7 +61,6 @@ class Game extends GetxController {
     } else {
       tableInt = players.map((e) => <int>[]).toList();
     }
-
     _table.addAll(tableInt);
   }
 
