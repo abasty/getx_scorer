@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getx_scorer/view/game_screen.dart';
+import 'package:getx_scorer/view/new_screen.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 Future<void> main() async {
@@ -12,7 +13,13 @@ Future<void> main() async {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const GameScreen(),
+      initialRoute: '/',
+      getPages: [
+        GetPage(name: '/', page: () => const GameScreen()),
+        GetPage(name: '/new', page: () => const NewScreen()),
+        /*GetPage(
+            name: '/third', page: () => Third(), transition: Transition.zoom),*/
+      ],
     ),
   );
 }

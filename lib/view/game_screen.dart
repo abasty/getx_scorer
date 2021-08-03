@@ -25,7 +25,10 @@ class GameScreen extends StatelessWidget {
                     child: const IconText('ANNULER', Icons.cancel),
                   ),
                   TextButton(
-                    onPressed: game.rowCount > 0 ? () => game.ctrlRAZ() : null,
+                    // onPressed: game.rowCount > 0 ? () => game.ctrlRAZ() : null,
+                    onPressed: () {
+                      Get.toNamed('/new');
+                    },
                     child: const IconText('RAZ', Icons.clear_all),
                   ),
                 ],
