@@ -5,13 +5,12 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 /// A game defined by an [id] and a list of [players].
-class Game extends GetxController {
-  static const storageName = 'getx_scorer';
+class GameControler extends GetxController {
   static const _tableKey = 'table';
   static const _playersKey = 'players';
 
   /// The [id] of the game.
-  final String id;
+  final String? id;
 
   /// List of players (names).
   final List<String> players;
@@ -25,53 +24,21 @@ class Game extends GetxController {
 
   final List<int> _cancelList = [];
 
-  final _storage = GetStorage(storageName);
+  final GetStorage? _storage;
 
   /// Create a new game given an ID and a list of players.
-  Game(this.id, this.players)
-      : _table = players.map((e) => <int>[]).toList().obs;
-
-  /// Read players and score table from storage, if possible
-  @override
-  void onInit() async {
-    super.onInit();
-
-    /// Read players
-    var playersRaw = _storage.read(_playersKey);
-    if (playersRaw is List) {
-      List<String> playersString =
-          playersRaw.map((name) => name as String).toList();
-      players.clear();
-      players.addAll(playersString);
-    } else {
-      _storage.write(_playersKey, players);
-    }
-
-    /// Read scores table
-    _table.clear();
-    List<List<int>> tableInt;
-    var tableRaw = _storage.read(_tableKey);
-    if (tableRaw is List) {
-      tableInt = tableRaw.map((player) {
-        var scores = (player as List).map((score) {
-          return score as int;
-        }).toList();
-        return scores;
-      }).toList();
-    } else {
-      tableInt = players.map((e) => <int>[]).toList();
-    }
-    _table.addAll(tableInt);
-  }
+  GameControler(this.players, {this.id})
+      : _table = players.map((e) => <int>[]).toList().obs,
+        _storage = id != null ? GetStorage(id) : null;
 
   /// [cancelable] is true iff the cancel list is not empty.
   bool get cancelable => _cancelList.isNotEmpty;
 
-  /// [rowCount] is the maximum number of elements in all columns.
-  int get rowCount => _table.map((c) => c.length).reduce(max);
-
   /// [columnCount] is the number of column (i.e. players) in the game
   int get columnCount => players.length;
+
+  /// [rowCount] is the maximum number of elements in all columns.
+  int get rowCount => _table.map((c) => c.length).reduce(max);
 
   /// Add a score to the player score column.
   void ctrlAddScore(int player, int score) {
@@ -79,7 +46,7 @@ class Game extends GetxController {
     var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
-    writeAndUpdate();
+    _writeAndUpdate();
   }
 
   /// Cancel the last [ctrlAddScore] method call.
@@ -87,7 +54,7 @@ class Game extends GetxController {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     _table[player].removeLast();
-    writeAndUpdate();
+    _writeAndUpdate();
   }
 
   /// Empty score table and cancel list.
@@ -95,7 +62,7 @@ class Game extends GetxController {
     _table.clear();
     _table.addAll(players.map((e) => <int>[]).toList().obs);
     _cancelList.clear();
-    writeAndUpdate();
+    _writeAndUpdate();
   }
 
   /// Gets a player line of score. Returns two values : the absolute score value
@@ -111,8 +78,44 @@ class Game extends GetxController {
     ];
   }
 
-  void writeAndUpdate() {
-    _storage.write(_tableKey, _table);
+  /// Read players and score table from storage, if possible
+  @override
+  void onInit() async {
+    super.onInit();
+
+    if (_storage == null) return;
+
+    /// Read players
+    var playersRaw = _storage!.read(_playersKey);
+    if (playersRaw is List) {
+      List<String> playersString =
+          playersRaw.map((name) => name as String).toList();
+      players.clear();
+      players.addAll(playersString);
+    } else {
+      _storage!.write(_playersKey, players);
+    }
+
+    /// Read scores table
+    _table.clear();
+    List<List<int>> tableInt;
+    var tableRaw = _storage!.read(_tableKey);
+    if (tableRaw is List) {
+      tableInt = tableRaw.map((player) {
+        var scores = (player as List).map((score) {
+          return score as int;
+        }).toList();
+        return scores;
+      }).toList();
+    } else {
+      tableInt = players.map((e) => <int>[]).toList();
+    }
+    _table.addAll(tableInt);
+  }
+
+  /// Write _table to persistent storage and update UI
+  void _writeAndUpdate() {
+    _storage?.write(_tableKey, _table);
     update();
   }
 }

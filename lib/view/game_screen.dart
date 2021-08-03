@@ -16,7 +16,7 @@ class GameScreen extends StatelessWidget {
       body: Column(
         children: [
           const Expanded(child: ScoreTable()),
-          GetBuilder<Game>(
+          GetBuilder<GameControler>(
             builder: (game) {
               return Row(
                 children: [
@@ -45,7 +45,7 @@ class ScoreTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<Game>(
+    return GetBuilder<GameControler>(
       builder: (game) {
         return Column(
           children: [

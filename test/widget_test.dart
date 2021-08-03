@@ -10,29 +10,20 @@ import 'package:get/get.dart';
 import 'package:getx_scorer/view/game_screen.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
-void main() {
-  // ignore: unused_local_variable
-  var game = Get.put(Game('ID', ['Véro', 'Alain', 'Martine']));
+Future<void> main() async {
+  var game = Get.put(GameControler(['Véro', 'Alain', 'Martine']));
 
-  testWidgets('Snackbar test', (WidgetTester tester) async {
+  testWidgets('Players', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(
       const GetMaterialApp(home: GameScreen()),
     );
-
-    // Verify that just one 'Classement' widget is on the screen
-    expect(find.text('Annuler'), findsOneWidget);
-    // Tap the 'Annuler' button.
-    await tester.tap(find.text('Annuler'));
-    // Schedule animation
+    expect(find.text('Véro'), findsOneWidget);
+    expect(find.text('Alain'), findsOneWidget);
+    expect(find.text('Martine'), findsOneWidget);
+    await tester.tap(find.text('Véro'));
+    expect(find.text(game.getScore(0, 0)[0].toString()), findsNothing);
     await tester.pump();
-    // Start animation
-    await tester.pump();
-    // Verify that our snackbar is displayed.
-    expect(find.text('Annuler'), findsNWidgets(2));
-    // Wait default animation time
-    await tester.pump(const Duration(seconds: 4));
-    // Verify that just one 'Annuler' widget is on the screen
-    expect(find.text('Annuler'), findsOneWidget);
+    expect(find.text(game.getScore(0, 0)[0].toString()), findsOneWidget);
   });
 }
