@@ -74,22 +74,20 @@ class Game extends GetxController {
   int get columnCount => players.length;
 
   /// Add a score to the player score column.
-  Future ctrlAddScore(int player, int score) async {
+  void ctrlAddScore(int player, int score) {
     _cancelList.add(player);
     var list = _table[player];
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
-    _storage.write(_tableKey, _table); //jsonEncode(_table));
-    update();
+    writeAndUpdate();
   }
 
   /// Cancel the last [ctrlAddScore] method call.
-  Future ctrlCancel() async {
+  void ctrlCancel() {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     _table[player].removeLast();
-    _storage.write(_tableKey, _table);
-    update();
+    writeAndUpdate();
   }
 
   /// Empty score table and cancel list.
@@ -97,8 +95,7 @@ class Game extends GetxController {
     _table.clear();
     _table.addAll(players.map((e) => <int>[]).toList().obs);
     _cancelList.clear();
-    _storage.write(_tableKey, _table);
-    update();
+    writeAndUpdate();
   }
 
   /// Gets a player line of score. Returns two values : the absolute score value
@@ -112,5 +109,10 @@ class Game extends GetxController {
           ? _table[player][line]
           : _table[player][line] - _table[player][line - 1]
     ];
+  }
+
+  void writeAndUpdate() {
+    _storage.write(_tableKey, _table);
+    update();
   }
 }
