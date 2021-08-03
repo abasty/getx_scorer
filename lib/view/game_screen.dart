@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../view_model/game.dart';
@@ -56,7 +58,7 @@ class ScoreTable extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        game.ctrlAddScore(p, 10);
+                        game.ctrlAddScore(p, Random().nextInt(33) + 1);
                         game.scrollController.jumpTo(
                             game.scrollController.position.maxScrollExtent);
                       },
