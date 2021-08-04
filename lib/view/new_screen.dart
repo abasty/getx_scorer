@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_scorer/view_model/game.dart';
-// import 'package:get/get.dart';
-// import '../view_model/game.dart';
 
 class NewScreen extends StatelessWidget {
   const NewScreen({Key? key}) : super(key: key);
@@ -24,23 +22,51 @@ class NewScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: GetBuilder<GameControler>(builder: (game) {
-                return ListView(
-                  children: game.players
-                      .map(
-                        (e) => ListTile(
-                          title: Text(e),
+              child: GetBuilder<GameControler>(
+                builder: (game) {
+                  return ReorderableListView(
+                    onReorder: (int oldIndex, int newIndex) {
+                      game.reorderNew(oldIndex, newIndex);
+                    },
+                    children: <Widget>[
+                      for (int index = 0;
+                          index < game.playersNew.length;
+                          index++)
+                        Dismissible(
+                          key: Key(game.playersNew[index]),
+                          child: ListTile(title: Text(game.playersNew[index])),
+                          onDismissed: (dir) {
+                            game.removeNew(index);
+                          },
                         ),
-                      )
-                      .toList(),
-                );
-              }),
+                    ],
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          final game = Get.find<GameControler>();
+          Get.defaultDialog(
+            title: 'Ajouter un joueur',
+            textCancel: 'Non',
+            textConfirm: 'Oui',
+            onConfirm: () {
+              game.addNew();
+              Get.back();
+            },
+            content: TextField(
+              textCapitalization: TextCapitalization.words,
+              autofocus: true,
+              onChanged: (value) {
+                game.playerNew = value;
+              },
+            ),
+          );
+        },
         child: const Icon(Icons.add),
       ),
     );

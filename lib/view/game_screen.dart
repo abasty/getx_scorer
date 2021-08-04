@@ -27,6 +27,7 @@ class GameScreen extends StatelessWidget {
                   TextButton(
                     // onPressed: game.rowCount > 0 ? () => game.ctrlRAZ() : null,
                     onPressed: () {
+                      game.initNew();
                       Get.toNamed('/new');
                     },
                     child: const IconText('RAZ', Icons.clear_all),

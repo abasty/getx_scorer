@@ -26,6 +26,12 @@ class GameControler extends GetxController {
 
   final GetStorage? _storage;
 
+  /// [NewScreen] state: list of players beeing edited.
+  final List<String> playersNew = [];
+
+  /// [NewScreen] state : Name of new player
+  String? playerNew;
+
   /// Create a new game given an ID and a list of players.
   GameControler(this.players, {this.id})
       : _table = players.map((e) => <int>[]).toList().obs,
@@ -39,6 +45,12 @@ class GameControler extends GetxController {
 
   /// [rowCount] is the maximum number of elements in all columns.
   int get rowCount => _table.map((c) => c.length).reduce(max);
+
+  /// [NewScreen] state : add a new player
+  void addNew() {
+    if (playerNew != null) playersNew.add(playerNew!);
+    update();
+  }
 
   /// Add a score to the player score column.
   void ctrlAddScore(int player, int score) {
@@ -78,6 +90,13 @@ class GameControler extends GetxController {
     ];
   }
 
+  /// Init [NewScreen] state
+  void initNew() {
+    playersNew.clear();
+    playersNew.addAll(players);
+    playerNew = null;
+  }
+
   /// Read players and score table from storage, if possible
   @override
   void onInit() async {
@@ -111,6 +130,22 @@ class GameControler extends GetxController {
       tableInt = players.map((e) => <int>[]).toList();
     }
     _table.addAll(tableInt);
+  }
+
+  /// [NewScreen] state : remove a player
+  void removeNew(int index) {
+    playersNew.removeAt(index);
+    update();
+  }
+
+  /// [NewScreen] state : reorder players
+  void reorderNew(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = playersNew.removeAt(oldIndex);
+    playersNew.insert(newIndex, item);
+    update();
   }
 
   /// Write _table to persistent storage and update UI
