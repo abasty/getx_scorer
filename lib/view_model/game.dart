@@ -17,7 +17,7 @@ class GameControler extends GetxController {
 
   /// List of score columns. Each column is linked with a player in the
   /// [players] list.
-  final RxList<List<int>> _table;
+  final List<List<int>> _table;
 
   /// The scroll controller
   final scrollController = ScrollController();
@@ -48,7 +48,7 @@ class GameControler extends GetxController {
 
   /// [NewScreen] state : add a new player
   void doAddNew() {
-    if (playerNew != null) playersNew.add(playerNew!);
+    playersNew.addIf(playerNew != null, playerNew!);
     update();
   }
 
