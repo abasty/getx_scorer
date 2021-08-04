@@ -21,13 +21,13 @@ class GameScreen extends StatelessWidget {
               return Row(
                 children: [
                   TextButton(
-                    onPressed: game.cancelable ? () => game.ctrlCancel() : null,
+                    onPressed: game.cancelable ? () => game.doCancel() : null,
                     child: const IconText('ANNULER', Icons.cancel),
                   ),
                   TextButton(
                     // onPressed: game.rowCount > 0 ? () => game.ctrlRAZ() : null,
                     onPressed: () {
-                      game.initNew();
+                      game.doInitNewGameState();
                       Get.toNamed('/new');
                     },
                     child: const IconText('RAZ', Icons.clear_all),
@@ -62,7 +62,7 @@ class ScoreTable extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        game.ctrlAddScore(p, Random().nextInt(33) + 1);
+                        game.doAddScore(p, Random().nextInt(33) + 1);
                         game.scrollController.jumpTo(
                             game.scrollController.position.maxScrollExtent);
                       },

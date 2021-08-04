@@ -13,12 +13,18 @@ Future<void> main() async {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       getPages: [
-        GetPage(name: '/', page: () => const GameScreen()),
-        GetPage(name: '/new', page: () => const NewScreen()),
-        /*GetPage(
-            name: '/third', page: () => Third(), transition: Transition.zoom),*/
+        GetPage(
+          name: '/',
+          page: () => const GameScreen(),
+        ),
+        GetPage(
+          name: '/new',
+          page: () => const NewScreen(),
+          transition: Transition.zoom,
+        ),
       ],
     ),
   );

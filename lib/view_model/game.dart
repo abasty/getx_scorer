@@ -47,13 +47,13 @@ class GameControler extends GetxController {
   int get rowCount => _table.map((c) => c.length).reduce(max);
 
   /// [NewScreen] state : add a new player
-  void addNew() {
+  void doAddNew() {
     if (playerNew != null) playersNew.add(playerNew!);
     update();
   }
 
   /// Add a score to the player score column.
-  void ctrlAddScore(int player, int score) {
+  void doAddScore(int player, int score) {
     _cancelList.add(player);
     var list = _table[player];
     var length = list.length;
@@ -61,20 +61,45 @@ class GameControler extends GetxController {
     _writeAndUpdate();
   }
 
-  /// Cancel the last [ctrlAddScore] method call.
-  void ctrlCancel() {
+  /// Cancel the last [doAddScore] method call.
+  void doCancel() {
     if (_cancelList.isEmpty) return;
     var player = _cancelList.removeLast();
     _table[player].removeLast();
     _writeAndUpdate();
   }
 
-  /// Empty score table and cancel list.
-  void ctrlRAZ() {
+  /// Init [NewScreen] state
+  void doInitNewGameState() {
+    playersNew.clear();
+    playersNew.addAll(players);
+    playerNew = null;
+  }
+
+  /// Clear score table and cancel list, define players.
+  void doNewGame() {
+    players.clear();
+    players.addAll(playersNew);
     _table.clear();
     _table.addAll(players.map((e) => <int>[]).toList().obs);
     _cancelList.clear();
-    _writeAndUpdate();
+    _writeAndUpdate(writePlayers: true);
+  }
+
+  /// [NewScreen] state : remove a player.
+  void doRemovePlayer(int index) {
+    playersNew.removeAt(index);
+    update();
+  }
+
+  /// [NewScreen] state : reorder players.
+  void doReorderPlayers(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = playersNew.removeAt(oldIndex);
+    playersNew.insert(newIndex, item);
+    update();
   }
 
   /// Gets a player line of score. Returns two values : the absolute score value
@@ -88,13 +113,6 @@ class GameControler extends GetxController {
           ? _table[player][line]
           : _table[player][line] - _table[player][line - 1]
     ];
-  }
-
-  /// Init [NewScreen] state
-  void initNew() {
-    playersNew.clear();
-    playersNew.addAll(players);
-    playerNew = null;
   }
 
   /// Read players and score table from storage, if possible
@@ -132,25 +150,10 @@ class GameControler extends GetxController {
     _table.addAll(tableInt);
   }
 
-  /// [NewScreen] state : remove a player
-  void removeNew(int index) {
-    playersNew.removeAt(index);
-    update();
-  }
-
-  /// [NewScreen] state : reorder players
-  void reorderNew(int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    final item = playersNew.removeAt(oldIndex);
-    playersNew.insert(newIndex, item);
-    update();
-  }
-
-  /// Write _table to persistent storage and update UI
-  void _writeAndUpdate() {
+  /// Write game state to persistent storage and update UI
+  void _writeAndUpdate({bool writePlayers = false}) {
     _storage?.write(_tableKey, _table);
+    if (writePlayers) _storage?.write(_playersKey, players);
     update();
   }
 }

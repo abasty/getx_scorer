@@ -10,6 +10,16 @@ class NewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nouvelle partie'),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.check),
+            onPressed: () {
+              final game = Get.find<GameControler>();
+              game.doNewGame();
+              Get.back();
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -26,7 +36,7 @@ class NewScreen extends StatelessWidget {
                 builder: (game) {
                   return ReorderableListView(
                     onReorder: (int oldIndex, int newIndex) {
-                      game.reorderNew(oldIndex, newIndex);
+                      game.doReorderPlayers(oldIndex, newIndex);
                     },
                     children: <Widget>[
                       for (int index = 0;
@@ -34,9 +44,25 @@ class NewScreen extends StatelessWidget {
                           index++)
                         Dismissible(
                           key: Key(game.playersNew[index]),
-                          child: ListTile(title: Text(game.playersNew[index])),
+                          child: ListTile(
+                            title: Text(game.playersNew[index]),
+                            trailing: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: IconButton(
+                                icon: const Icon(Icons.delete_forever),
+                                color: Colors.red,
+                                onPressed: () {
+                                  game.doRemovePlayer(index);
+                                },
+                              ),
+                            ),
+                          ),
+                          background: Container(
+                            color: Colors.red,
+                            child: const Center(child: Text('Supprimer')),
+                          ),
                           onDismissed: (dir) {
-                            game.removeNew(index);
+                            game.doRemovePlayer(index);
                           },
                         ),
                     ],
@@ -55,7 +81,7 @@ class NewScreen extends StatelessWidget {
             textCancel: 'Non',
             textConfirm: 'Oui',
             onConfirm: () {
-              game.addNew();
+              game.doAddNew();
               Get.back();
             },
             content: TextField(
