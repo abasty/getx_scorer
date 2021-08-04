@@ -29,8 +29,11 @@ class GameControler extends GetxController {
   /// [NewScreen] state: list of players beeing edited.
   final List<String> playersNew = [];
 
-  /// [NewScreen] state : Name of new player
+  /// [NewScreen] state: Name of new player.
   String? playerNew;
+
+  /// [TurnScreen] state: Slected player
+  String? playerTurn;
 
   /// Create a new game given an ID and a list of players.
   GameControler(this.players, {this.id})

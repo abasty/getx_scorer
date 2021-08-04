@@ -78,9 +78,10 @@ class ScoreTable extends StatelessWidget {
                 height: 48,
                 child: TextButton(
                   onPressed: () {
-                    game.doAddScore(p, Random().nextInt(33) + 1);
+                    /*game.doAddScore(p, Random().nextInt(33) + 1);
                     game.scrollController
-                        .jumpTo(game.scrollController.position.maxScrollExtent);
+                        .jumpTo(game.scrollController.position.maxScrollExtent);*/
+                    Get.toNamed('/turn');
                   },
                   child: SizedBox(
                     width: double.infinity,
