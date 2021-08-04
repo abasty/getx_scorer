@@ -109,24 +109,3 @@ class ScoreTable extends StatelessWidget {
     );
   }
 }
-
-class IconText extends StatelessWidget {
-  final String _title;
-  final IconData _iconData;
-
-  const IconText(this._title, this._iconData, {Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 80,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(_iconData),
-          Text(_title),
-        ],
-      ),
-    );
-  }
-}
