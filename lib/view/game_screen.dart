@@ -12,32 +12,23 @@ class GameScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Compteur de points'),
-      ),
-      body: Column(
-        children: [
-          const Expanded(child: ScoreTable()),
-          GetBuilder<GameControler>(
-            builder: (game) {
-              return Row(
-                children: [
-                  TextButton(
-                    onPressed: game.cancelable ? () => game.doCancel() : null,
-                    child: const IconText('ANNULER', Icons.cancel),
-                  ),
-                  TextButton(
-                    // onPressed: game.rowCount > 0 ? () => game.ctrlRAZ() : null,
-                    onPressed: () {
-                      game.doInitNewGameState();
-                      Get.toNamed('/new');
-                    },
-                    child: const IconText('RAZ', Icons.clear_all),
-                  ),
-                ],
-              );
-            },
-          ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                var game = Get.find<GameControler>();
+                game.doCancel();
+              },
+              icon: const Icon(Icons.cancel)),
+          IconButton(
+              onPressed: () {
+                var game = Get.find<GameControler>();
+                game.doInitNewGameState();
+                Get.toNamed('/new');
+              },
+              icon: const Icon(Icons.clear_all)),
         ],
       ),
+      body: const ScoreTable(),
     );
   }
 }
@@ -51,67 +42,65 @@ class ScoreTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<GameControler>(
       builder: (game) {
+        var scores = ListView.builder(
+          controller: game.scrollController,
+          scrollDirection: Axis.vertical,
+          itemCount: game.rowCount,
+          itemBuilder: (context, row) {
+            return Container(
+              color: row.isEven ? Colors.green[50] : Colors.white,
+              child: Row(
+                children: [
+                  for (int p = 0; p < game.columnCount; p++)
+                    Builder(
+                      builder: (context) {
+                        var score = game.getScore(p, row)[0];
+                        return SizedBox(
+                          width: (Get.width - 16.0) / game.columnCount,
+                          child: Text(
+                            '${score < 0 ? "-" : score}',
+                            style: const TextStyle(fontSize: 20.0),
+                            textAlign: TextAlign.end,
+                          ),
+                        );
+                      },
+                    )
+                ],
+              ),
+            );
+          },
+        );
+        var names = Row(
+          children: [
+            for (int p = 0; p < game.columnCount; p++)
+              SizedBox(
+                width: (Get.width - 16.0) / game.columnCount,
+                height: 48,
+                child: TextButton(
+                  onPressed: () {
+                    game.doAddScore(p, Random().nextInt(33) + 1);
+                    game.scrollController
+                        .jumpTo(game.scrollController.position.maxScrollExtent);
+                  },
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      game.players[p],
+                      style: const TextStyle(fontSize: 20.0),
+                      textAlign: TextAlign.right,
+                    ),
+                  ),
+                ),
+              )
+          ],
+        );
         return Padding(
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(
-                children: [
-                  for (int p = 0; p < game.columnCount; p++)
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: (Get.width - 16.0) / game.columnCount,
-                          height: 48,
-                          child: TextButton(
-                            onPressed: () {
-                              game.doAddScore(p, Random().nextInt(33) + 1);
-                              game.scrollController.jumpTo(game
-                                  .scrollController.position.maxScrollExtent);
-                            },
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Text(
-                                game.players[p],
-                                style: const TextStyle(fontSize: 20.0),
-                                textAlign: TextAlign.right,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                ],
-              ),
+              names,
               Expanded(
-                child: ListView.builder(
-                  controller: game.scrollController,
-                  scrollDirection: Axis.vertical,
-                  itemCount: game.rowCount,
-                  itemBuilder: (context, row) {
-                    return Container(
-                      color: row.isEven ? Colors.green[50] : Colors.white,
-                      child: Row(
-                        children: [
-                          for (int p = 0; p < game.columnCount; p++)
-                            Builder(
-                              builder: (context) {
-                                var score = game.getScore(p, row)[0];
-                                return SizedBox(
-                                  width: (Get.width - 16.0) / game.columnCount,
-                                  child: Text(
-                                    '${score < 0 ? "-" : score}',
-                                    style: const TextStyle(fontSize: 20.0),
-                                    textAlign: TextAlign.end,
-                                  ),
-                                );
-                              },
-                            )
-                        ],
-                      ),
-                    );
-                  },
-                ),
+                child: scores,
               ),
             ],
           ),
@@ -130,7 +119,7 @@ class IconText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 120,
+      width: 80,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
