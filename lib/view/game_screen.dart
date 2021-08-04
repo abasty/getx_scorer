@@ -25,7 +25,7 @@ class GameScreen extends StatelessWidget {
                 game.doInitNewGameState();
                 Get.toNamed('/new');
               },
-              icon: const Icon(Icons.clear_all)),
+              icon: const Icon(Icons.create)),
         ],
       ),
       body: const ScoreTable(),
