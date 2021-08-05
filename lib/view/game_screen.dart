@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../view_model/game.dart';
 
-class GameScreen extends StatelessWidget {
+import '../view_model/game.dart';
+import 'game_view.dart';
+
+class GameScreen extends GameView {
   const GameScreen({Key? key}) : super(key: key);
 
   @override
@@ -13,13 +15,11 @@ class GameScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                var game = Get.find<GameController>();
                 game.doCancel();
               },
               icon: const Icon(Icons.cancel)),
           IconButton(
               onPressed: () {
-                var game = Get.find<GameController>();
                 game.doInitNewGameState();
                 Get.toNamed('/new');
               },

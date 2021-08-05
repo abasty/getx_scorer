@@ -2,9 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_scorer/view_model/game.dart';
 
-class TurnScreen extends GetView<GameController> {
+import '../view_model/game.dart';
+import 'game_view.dart';
+
+class TurnScreen extends GameView {
   const TurnScreen({Key? key}) : super(key: key);
 
   @override
@@ -16,9 +18,9 @@ class TurnScreen extends GetView<GameController> {
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              controller.doAddScore(0, Random().nextInt(33) + 1);
-              controller.scrollController
-                  .jumpTo(controller.scrollController.position.maxScrollExtent);
+              game.doAddScore(0, Random().nextInt(33) + 1);
+              game.scrollController
+                  .jumpTo(game.scrollController.position.maxScrollExtent);
               Get.back();
             },
           )
@@ -29,15 +31,14 @@ class TurnScreen extends GetView<GameController> {
         child: Column(
           children: [
             GetX<GameController>(
-              builder: (_) {
+              builder: (game) {
                 return DropdownButton<String>(
                   icon: const Icon(Icons.person),
-                  value: controller.players[controller.playerTurn.value],
+                  value: game.players[game.playerTurn.value],
                   onChanged: (String? newValue) {
-                    controller.playerTurn.value =
-                        controller.players.indexOf(newValue!);
+                    game.playerTurn.value = game.players.indexOf(newValue!);
                   },
-                  items: controller.players
+                  items: game.players
                       .map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
