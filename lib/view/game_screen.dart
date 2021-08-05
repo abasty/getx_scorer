@@ -23,7 +23,8 @@ class GameScreen extends GameView {
                 game.doInitNewGameState();
                 Get.toNamed('/new');
               },
-              icon: const Icon(Icons.create)),
+              color: Colors.redAccent,
+              icon: const Icon(Icons.delete_forever)),
         ],
       ),
       body: const ScoreTable(),

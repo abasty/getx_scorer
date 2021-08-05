@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,9 +16,10 @@ class TurnScreen extends GameView {
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              game.doAddScore(0, Random().nextInt(33) + 1);
-              game.scrollController
-                  .jumpTo(game.scrollController.position.maxScrollExtent);
+              var points = int.tryParse(game.pointsTurn);
+              if (points != null) {
+                game.doAddScore(game.playerTurn.value, points);
+              }
               Get.back();
             },
           )
@@ -35,25 +34,27 @@ class TurnScreen extends GameView {
                 return DropdownButton<String>(
                   icon: const Icon(Icons.person),
                   value: game.players[game.playerTurn.value],
-                  onChanged: (String? newValue) {
-                    game.playerTurn.value = game.players.indexOf(newValue!);
-                  },
+                  onChanged: (String? newValue) =>
+                      game.playerTurn.value = game.players.indexOf(newValue!),
                   items: game.players
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                      .map<DropdownMenuItem<String>>(
+                          (value) => DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              ))
+                      .toList(),
                 );
               },
             ),
-            TextFormField(
+            TextField(
               decoration: const InputDecoration(
-                icon: Icon(Icons.input),
-                hintText: 'Points marqués pendant ce tour',
-                labelText: 'Points',
+                icon: Icon(Icons.money),
+                labelText: 'Points marqués pendant ce tour',
               ),
+              keyboardType: const TextInputType.numberWithOptions(
+                  signed: false, decimal: false),
+              autofocus: true,
+              onChanged: (value) => game.pointsTurn = value,
             ),
           ],
         ),

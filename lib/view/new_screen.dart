@@ -10,6 +10,7 @@ class NewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Nouvelle partie'),
+        backgroundColor: Colors.red,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.check),

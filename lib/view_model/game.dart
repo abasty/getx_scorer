@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -35,6 +36,9 @@ class GameController extends GetxController {
   /// [TurnScreen] state: Selected player
   var playerTurn = 0.obs;
 
+  /// [TurnScreen] state: Points
+  String pointsTurn = '0';
+
   /// Create a new game given an ID and a list of players.
   GameController(this.players, {this.id})
       : _table = players.map((e) => <int>[]).toList().obs,
@@ -62,6 +66,8 @@ class GameController extends GetxController {
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
     _writeAndUpdate();
+    SchedulerBinding.instance!.addPostFrameCallback((_) =>
+        scrollController.jumpTo(scrollController.position.maxScrollExtent));
   }
 
   /// Cancel the last [doAddScore] method call.
