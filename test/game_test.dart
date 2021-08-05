@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 void main() async {
-  var game = Get.put(GameControler(['Véro', 'Alain', 'Martine']));
+  var game = Get.put(GameController(['Véro', 'Alain', 'Martine']));
   test('Game()', () {
     assert(listEquals(game.getScore(0, 0), [-1, 0]));
   });

@@ -14,7 +14,7 @@ class NewScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              final game = Get.find<GameControler>();
+              final game = Get.find<GameController>();
               game.doNewGame();
               Get.back();
             },
@@ -32,7 +32,7 @@ class NewScreen extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: GetBuilder<GameControler>(
+              child: GetBuilder<GameController>(
                 builder: (game) {
                   return ReorderableListView(
                     onReorder: (int oldIndex, int newIndex) {
@@ -75,7 +75,7 @@ class NewScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final game = Get.find<GameControler>();
+          final game = Get.find<GameController>();
           Get.defaultDialog(
             title: 'Ajouter un joueur',
             textCancel: 'Non',

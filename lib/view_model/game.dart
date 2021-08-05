@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 /// A game defined by an [id] and a list of [players].
-class GameControler extends GetxController {
+class GameController extends GetxController {
   static const _tableKey = 'table';
   static const _playersKey = 'players';
 
@@ -32,11 +32,11 @@ class GameControler extends GetxController {
   /// [NewScreen] state: Name of new player.
   String? playerNew;
 
-  /// [TurnScreen] state: Slected player
-  String? playerTurn;
+  /// [TurnScreen] state: Selected player
+  var playerTurn = ''.obs;
 
   /// Create a new game given an ID and a list of players.
-  GameControler(this.players, {this.id})
+  GameController(this.players, {this.id})
       : _table = players.map((e) => <int>[]).toList().obs,
         _storage = id != null ? GetStorage(id) : null;
 

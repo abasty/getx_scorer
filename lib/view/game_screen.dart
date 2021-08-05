@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../view_model/game.dart';
@@ -15,13 +13,13 @@ class GameScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {
-                var game = Get.find<GameControler>();
+                var game = Get.find<GameController>();
                 game.doCancel();
               },
               icon: const Icon(Icons.cancel)),
           IconButton(
               onPressed: () {
-                var game = Get.find<GameControler>();
+                var game = Get.find<GameController>();
                 game.doInitNewGameState();
                 Get.toNamed('/new');
               },
@@ -40,7 +38,7 @@ class ScoreTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<GameControler>(
+    return GetBuilder<GameController>(
       builder: (game) {
         var scores = ListView.builder(
           controller: game.scrollController,
@@ -78,10 +76,7 @@ class ScoreTable extends StatelessWidget {
                 height: 48,
                 child: TextButton(
                   onPressed: () {
-                    /*game.doAddScore(p, Random().nextInt(33) + 1);
-                    game.scrollController
-                        .jumpTo(game.scrollController.position.maxScrollExtent);*/
-                    Get.toNamed('/turn');
+                    Get.toNamed('/turn', arguments: p.toString());
                   },
                   child: SizedBox(
                     width: double.infinity,

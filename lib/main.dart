@@ -9,7 +9,7 @@ import 'view/turn_screen.dart';
 
 Future<void> main() async {
   await GetStorage.init('game_app');
-  Get.put(GameControler(['Véro', 'Alain'], id: 'game_app'));
+  Get.put(GameController(['Véro', 'Alain'], id: 'game_app'));
   runApp(
     GetMaterialApp(
       theme: ThemeData(

@@ -11,7 +11,7 @@ import 'package:getx_scorer/view/game_screen.dart';
 import 'package:getx_scorer/view_model/game.dart';
 
 Future<void> main() async {
-  var game = Get.put(GameControler(['Véro', 'Alain', 'Martine']));
+  var game = Get.put(GameController(['Véro', 'Alain', 'Martine']));
 
   testWidgets('Players', (WidgetTester tester) async {
     // Build our app and trigger a frame.
