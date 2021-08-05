@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getx_scorer/view_model/game.dart';
 
+import '../view_model/game.dart';
 import 'game_view.dart';
 
 class TurnScreen extends GameView {
@@ -31,7 +31,7 @@ class TurnScreen extends GameView {
         child: Column(
           children: [
             GetX<GameController>(
-              builder: (_) {
+              builder: (game) {
                 return DropdownButton<String>(
                   icon: const Icon(Icons.person),
                   value: game.players[game.playerTurn.value],
