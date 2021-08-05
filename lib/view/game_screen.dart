@@ -76,7 +76,8 @@ class ScoreTable extends StatelessWidget {
                 height: 48,
                 child: TextButton(
                   onPressed: () {
-                    Get.toNamed('/turn', arguments: p.toString());
+                    game.playerTurn.value = p;
+                    Get.toNamed('/turn');
                   },
                   child: SizedBox(
                     width: double.infinity,

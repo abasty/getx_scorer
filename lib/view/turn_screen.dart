@@ -24,36 +24,39 @@ class TurnScreen extends GetView<GameController> {
           )
         ],
       ),
-      body: GetBuilder<GameController>(builder: (game) {
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              DropdownButton<String>(
-                icon: const Icon(Icons.person),
-                value: game.players[int.parse(Get.arguments.toString())],
-                onChanged: (String? newValue) {
-                  game.playerTurn.value = newValue!;
-                },
-                items:
-                    game.players.map<DropdownMenuItem<String>>((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            GetX<GameController>(
+              builder: (_) {
+                return DropdownButton<String>(
+                  icon: const Icon(Icons.person),
+                  value: controller.players[controller.playerTurn.value],
+                  onChanged: (String? newValue) {
+                    controller.playerTurn.value =
+                        controller.players.indexOf(newValue!);
+                  },
+                  items: controller.players
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                );
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                icon: Icon(Icons.input),
+                hintText: 'Points marqués pendant ce tour',
+                labelText: 'Points',
               ),
-              TextFormField(
-                decoration: const InputDecoration(
-                  icon: Icon(Icons.input),
-                  hintText: 'Points marqués pendant ce tour',
-                  labelText: 'Points',
-                ),
-              ),
-            ],
-          ),
-        );
-      }),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
