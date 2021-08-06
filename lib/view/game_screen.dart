@@ -75,9 +75,12 @@ class ScoreTable extends StatelessWidget {
               SizedBox(
                 width: (Get.width - 16.0) / game.columnCount,
                 height: 48,
-                child: TextButton(
+                child: OutlinedButton(
                   onPressed: () {
                     game.playerTurn.value = p;
+                    game.pointsTurnControler.text = '';
+                    game.bonus.value = false;
+                    game.malus.value = false;
                     Get.toNamed('/turn');
                   },
                   child: SizedBox(
@@ -85,7 +88,7 @@ class ScoreTable extends StatelessWidget {
                     child: Text(
                       game.players[p],
                       style: const TextStyle(fontSize: 20.0),
-                      textAlign: TextAlign.right,
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ),

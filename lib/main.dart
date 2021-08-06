@@ -25,12 +25,12 @@ Future<void> main() async {
         GetPage(
           name: '/new',
           page: () => const NewScreen(),
-          transition: Transition.zoom,
+          transition: Transition.rightToLeft,
         ),
         GetPage(
           name: '/turn',
           page: () => const TurnScreen(),
-          transition: Transition.zoom,
+          transition: Transition.rightToLeft,
         ),
       ],
     ),

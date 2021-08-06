@@ -33,11 +33,17 @@ class GameController extends GetxController {
   /// [NewScreen] state: Name of new player.
   String? playerNew;
 
-  /// [TurnScreen] state: Selected player
+  /// [TurnScreen] state: Selected player.
   var playerTurn = 0.obs;
 
-  /// [TurnScreen] state: Points
-  String pointsTurn = '0';
+  /// [TurnScreen] state: Points.
+  final TextEditingController pointsTurnControler = TextEditingController();
+
+  /// [TurnScreen] state: Bonus.
+  var bonus = false.obs;
+
+  /// [TurnScreen] state: Malus.
+  var malus = false.obs;
 
   /// Create a new game given an ID and a list of players.
   GameController(this.players, {this.id})

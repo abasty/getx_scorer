@@ -75,6 +75,7 @@ class NewScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.red,
         onPressed: () {
           final game = Get.find<GameController>();
           Get.defaultDialog(

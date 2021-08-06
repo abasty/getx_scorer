@@ -16,8 +16,10 @@ class TurnScreen extends GameView {
           IconButton(
             icon: const Icon(Icons.check),
             onPressed: () {
-              var points = int.tryParse(game.pointsTurn);
+              var points = int.tryParse(game.pointsTurnControler.text);
               if (points != null) {
+                if (game.malus.value) points = -points;
+                if (game.bonus.value) points += 50;
                 game.doAddScore(game.playerTurn.value, points);
               }
               Get.back();
@@ -38,29 +40,43 @@ class TurnScreen extends GameView {
                       game.playerTurn.value = game.players.indexOf(newValue!),
                   items: game.players
                       .map<DropdownMenuItem<String>>(
-                          (value) => DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              ))
+                        (value) => DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        ),
+                      )
                       .toList(),
                 );
               },
             ),
+            const DigitKeyboard(),
             TextField(
+              controller: game.pointsTurnControler,
               decoration: const InputDecoration(
-                // icon: Icon(Icons.money),
                 labelText: 'Points marqués pendant ce tour',
               ),
-              keyboardType: const TextInputType.numberWithOptions(
-                  signed: false, decimal: false),
               autofocus: true,
-              onChanged: (value) => game.pointsTurn = value,
+              showCursor: false,
+              readOnly: true,
             ),
-            const Divider(
-              color: Colors.white,
-              height: 48,
-            ),
-            const DigitKeyboard(),
+            GetX<GameController>(builder: (game) {
+              return ListTile(
+                title: const Text('Bonus (+50)'),
+                leading: Switch(
+                  value: game.bonus.value,
+                  onChanged: (value) => game.bonus.value = value,
+                ),
+              );
+            }),
+            GetX<GameController>(builder: (game) {
+              return ListTile(
+                title: const Text('Malus fin de partie'),
+                leading: Switch(
+                  value: game.malus.value,
+                  onChanged: (value) => game.malus.value = value,
+                ),
+              );
+            }),
           ],
         ),
       ),
@@ -78,15 +94,7 @@ class DigitKeyboard extends GameView {
     return Column(
       children: [
         Row(
-          children: <Widget>[
-            for (int i = 7; i <= 9; i++)
-              OutlinedButton(
-                onPressed: () => digit(i),
-                child: Text(i.toString()),
-              )
-          ],
-        ),
-        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             for (int i = 4; i <= 6; i++)
               OutlinedButton(
@@ -96,6 +104,17 @@ class DigitKeyboard extends GameView {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            for (int i = 7; i <= 9; i++)
+              OutlinedButton(
+                onPressed: () => digit(i),
+                child: Text(i.toString()),
+              )
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             for (int i = 1; i <= 3; i++)
               OutlinedButton(
@@ -105,9 +124,10 @@ class DigitKeyboard extends GameView {
           ],
         ),
         Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () => game.malus.value = !game.malus.value,
               child: const Text('+/-'),
             ),
             OutlinedButton(
@@ -115,7 +135,7 @@ class DigitKeyboard extends GameView {
               child: const Text('0'),
             ),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: () => game.pointsTurnControler.text = '',
               child: const Text('C'),
             ),
           ],
@@ -125,6 +145,7 @@ class DigitKeyboard extends GameView {
   }
 
   void digit(int n) {
-    print(n.toString());
+    game.pointsTurnControler.text =
+        game.pointsTurnControler.text + n.toString();
   }
 }
