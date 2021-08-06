@@ -93,10 +93,13 @@ class ScoreTable extends StatelessWidget {
                   },
                   child: SizedBox(
                     width: double.infinity,
-                    child: Text(
-                      game.players[p],
-                      style: const TextStyle(fontSize: 20.0),
-                      textAlign: TextAlign.center,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        game.players[p],
+                        style: const TextStyle(fontSize: 20.0),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
                 ),
