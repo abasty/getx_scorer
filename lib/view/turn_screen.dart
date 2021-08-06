@@ -14,6 +14,13 @@ class TurnScreen extends GameView {
           title: const Text('Tour de jeu'),
           actions: [
             IconButton(
+              icon: const Icon(Icons.ac_unit),
+              onPressed: () {
+                game.doAddScore(game.playerTurn.value, 0);
+                Get.back();
+              },
+            ),
+            IconButton(
               icon: const Icon(Icons.check),
               onPressed: () {
                 var points = int.tryParse(game.pointsTurn.value);
@@ -31,7 +38,7 @@ class TurnScreen extends GameView {
           padding: const EdgeInsets.all(8.0),
           child: Column(children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Icon(Icons.person),
                 const SizedBox(width: 8),
@@ -54,15 +61,21 @@ class TurnScreen extends GameView {
                     ),
                   ),
                 ),
-                const Spacer(),
+                //const Spacer(),
+                const SizedBox(width: 16),
                 GetX<GameController>(builder: (game) {
                   return SizedBox(
-                      width: 120,
-                      child: Container(
-                          padding: const EdgeInsets.all(3.0),
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Colors.green)),
-                          child: Text('Points : ${game.pointsTurn.value}')));
+                    width: 120,
+                    child: Container(
+                      padding: const EdgeInsets.all(3.0),
+                      decoration: BoxDecoration(
+                          border: Border.all(color: Colors.green)),
+                      child: Text(
+                        '${game.pointsTurn.value != "" ? game.pointsTurn.value : '0'} point(s).',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  );
                 }),
               ],
             ),
