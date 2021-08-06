@@ -13,18 +13,26 @@ class GameScreen extends GameView {
       appBar: AppBar(
         title: const Text('Compteur de points'),
         actions: [
-          IconButton(
-              onPressed: () {
-                game.doCancel();
-              },
-              icon: const Icon(Icons.cancel)),
-          IconButton(
-              onPressed: () {
-                game.doInitNewGameState();
-                Get.toNamed('/new');
-              },
-              color: Colors.redAccent,
-              icon: const Icon(Icons.delete_forever)),
+          PopupMenuButton<String>(
+            onSelected: (value) {
+              var words = value.split(' ');
+              switch (words[0]) {
+                case 'Annuler':
+                  game.doCancel();
+                  break;
+                case 'Créer':
+                  game.doInitNewGameState();
+                  Get.toNamed('/new');
+                  break;
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return {'Annuler derniere saisie', 'Créer nouvelle partie'}
+                  .map((String choice) =>
+                      PopupMenuItem<String>(value: choice, child: Text(choice)))
+                  .toList();
+            },
+          ),
         ],
       ),
       body: const ScoreTable(),
