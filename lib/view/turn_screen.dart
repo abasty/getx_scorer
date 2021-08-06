@@ -42,10 +42,10 @@ class TurnScreen extends GameView {
               children: [
                 const Icon(Icons.person),
                 const SizedBox(width: 8),
-                SizedBox(
-                  width: 100,
-                  child: GetX<GameController>(
-                    builder: (game) => DropdownButton<String>(
+                GetX<GameController>(
+                  builder: (game) => SizedBox(
+                    width: 176,
+                    child: DropdownButton<String>(
                       isExpanded: true,
                       value: game.players[game.playerTurn.value],
                       onChanged: (String? newValue) => game.playerTurn.value =
@@ -61,39 +61,69 @@ class TurnScreen extends GameView {
                     ),
                   ),
                 ),
-                //const Spacer(),
-                const SizedBox(width: 16),
-                GetX<GameController>(builder: (game) {
-                  return SizedBox(
-                    width: 120,
+              ],
+            ),
+            GetX<GameController>(builder: (game) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GetX<GameController>(builder: (game) {
+                    return GestureDetector(
+                      child: Container(
+                        width: 64,
+                        color: game.malus.value ? Colors.red : Colors.white,
+                        child: Container(
+                          padding: const EdgeInsets.all(3.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey)),
+                          child: Text(
+                            game.malus.value ? '-' : '+',
+                            style: const TextStyle(fontSize: 20.0),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      onTap: () => game.malus.value = !game.malus.value,
+                    );
+                  }),
+                  SizedBox(
+                    width: 96,
                     child: Container(
                       padding: const EdgeInsets.all(3.0),
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.green)),
+                      decoration:
+                          BoxDecoration(border: Border.all(color: Colors.grey)),
                       child: Text(
-                        '${game.pointsTurn.value != "" ? game.pointsTurn.value : '0'} point(s).',
+                        game.pointsTurn.value != ''
+                            ? game.pointsTurn.value
+                            : '0',
+                        style: const TextStyle(fontSize: 20.0),
                         textAlign: TextAlign.end,
                       ),
                     ),
-                  );
-                }),
-              ],
-            ),
+                  ),
+                  GetX<GameController>(builder: (game) {
+                    return GestureDetector(
+                      child: Container(
+                        width: 64,
+                        color: game.bonus.value ? Colors.green : Colors.white,
+                        child: Container(
+                          padding: const EdgeInsets.all(3.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey)),
+                          child: Text(
+                            game.bonus.value ? '+50' : '+0',
+                            style: const TextStyle(fontSize: 20.0),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                      onTap: () => game.bonus.value = !game.bonus.value,
+                    );
+                  }),
+                ],
+              );
+            }),
             const DigitKeyboard(),
-            GetX<GameController>(
-                builder: (game) => ListTile(
-                    title: const Text('Bonus (+50)'),
-                    leading: Switch(
-                      value: game.bonus.value,
-                      onChanged: (value) => game.bonus.value = value,
-                    ))),
-            GetX<GameController>(
-                builder: (game) => ListTile(
-                    title: const Text('Malus fin de partie'),
-                    leading: Switch(
-                      value: game.malus.value,
-                      onChanged: (value) => game.malus.value = value,
-                    ))),
           ]),
         ));
   }
