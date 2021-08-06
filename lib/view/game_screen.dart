@@ -49,34 +49,6 @@ class ScoreTable extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<GameController>(
       builder: (game) {
-        var scores = ListView.builder(
-          controller: game.scrollController,
-          scrollDirection: Axis.vertical,
-          itemCount: game.rowCount,
-          itemBuilder: (context, row) {
-            return Container(
-              color: row.isEven ? Colors.green[50] : Colors.white,
-              child: Row(
-                children: [
-                  for (int p = 0; p < game.columnCount; p++)
-                    Builder(
-                      builder: (context) {
-                        var score = game.getScore(p, row)[0];
-                        return SizedBox(
-                          width: (Get.width - 16.0) / game.columnCount,
-                          child: Text(
-                            '${score < 0 ? "-" : score}',
-                            style: const TextStyle(fontSize: 20.0),
-                            textAlign: TextAlign.end,
-                          ),
-                        );
-                      },
-                    )
-                ],
-              ),
-            );
-          },
-        );
         var names = Row(
           children: [
             for (int p = 0; p < game.columnCount; p++)
@@ -105,6 +77,63 @@ class ScoreTable extends StatelessWidget {
                 ),
               )
           ],
+        );
+        var scores = ListView.builder(
+          controller: game.scrollController,
+          scrollDirection: Axis.vertical,
+          itemCount: game.rowCount,
+          itemBuilder: (context, row) {
+            return Container(
+              color: row.isEven ? Colors.green[50] : Colors.white,
+              child: Row(
+                children: [
+                  for (int p = 0; p < game.columnCount; p++)
+                    Builder(
+                      builder: (context) {
+                        var score = game.getScore(p, row)[0];
+                        var delta = game.getScore(p, row)[1];
+                        Widget text;
+                        if (delta != 0) {
+                          text = Text(
+                            '${score < 0 ? "-" : score}',
+                            style: const TextStyle(fontSize: 20.0),
+                            textAlign: TextAlign.end,
+                          );
+                        } else {
+                          text = Text(
+                            score == -1 ? '...' : 'passe',
+                            style: const TextStyle(
+                                fontSize: 12.0, fontStyle: FontStyle.italic),
+                            textAlign: TextAlign.end,
+                          );
+                        }
+                        return SizedBox(
+                          width: (Get.width - 16.0) / game.columnCount,
+                          height: 32,
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 8.0,
+                              ),
+                              if (delta != 0)
+                                Text(
+                                  delta >= 0 ? '+$delta' : '-$delta',
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                      fontSize: 12.0,
+                                      fontStyle: FontStyle.italic),
+                                ),
+                              const Spacer(),
+                              text,
+                            ],
+                          ),
+                        );
+                      },
+                    )
+                ],
+              ),
+            );
+          },
         );
         return Padding(
           padding: const EdgeInsets.all(8.0),
