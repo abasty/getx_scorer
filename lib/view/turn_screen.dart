@@ -10,77 +10,79 @@ class TurnScreen extends GameView {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tour de jeu'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check),
-            onPressed: () {
-              var points = int.tryParse(game.pointsTurnControler.text);
-              if (points != null) {
-                if (game.malus.value) points = -points;
-                if (game.bonus.value) points += 50;
-                game.doAddScore(game.playerTurn.value, points);
-              }
-              Get.back();
-            },
-          )
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            GetX<GameController>(
-              builder: (game) {
-                return DropdownButton<String>(
-                  icon: const Icon(Icons.person),
-                  value: game.players[game.playerTurn.value],
-                  onChanged: (String? newValue) =>
-                      game.playerTurn.value = game.players.indexOf(newValue!),
-                  items: game.players
-                      .map<DropdownMenuItem<String>>(
-                        (value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        ),
-                      )
-                      .toList(),
-                );
+        appBar: AppBar(
+          title: const Text('Tour de jeu'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.check),
+              onPressed: () {
+                var points = int.tryParse(game.pointsTurn.value);
+                if (points != null) {
+                  if (game.malus.value) points = -points;
+                  if (game.bonus.value) points += 50;
+                  game.doAddScore(game.playerTurn.value, points);
+                }
+                Get.back();
               },
-            ),
-            const DigitKeyboard(),
-            TextField(
-              controller: game.pointsTurnControler,
-              decoration: const InputDecoration(
-                labelText: 'Points marqués pendant ce tour',
-              ),
-              autofocus: true,
-              showCursor: false,
-              readOnly: true,
-            ),
-            GetX<GameController>(builder: (game) {
-              return ListTile(
-                title: const Text('Bonus (+50)'),
-                leading: Switch(
-                  value: game.bonus.value,
-                  onChanged: (value) => game.bonus.value = value,
-                ),
-              );
-            }),
-            GetX<GameController>(builder: (game) {
-              return ListTile(
-                title: const Text('Malus fin de partie'),
-                leading: Switch(
-                  value: game.malus.value,
-                  onChanged: (value) => game.malus.value = value,
-                ),
-              );
-            }),
+            )
           ],
         ),
-      ),
-    );
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Icon(Icons.person),
+                const SizedBox(width: 8),
+                SizedBox(
+                  width: 100,
+                  child: GetX<GameController>(
+                    builder: (game) => DropdownButton<String>(
+                      isExpanded: true,
+                      value: game.players[game.playerTurn.value],
+                      onChanged: (String? newValue) => game.playerTurn.value =
+                          game.players.indexOf(newValue!),
+                      items: game.players
+                          .map<DropdownMenuItem<String>>(
+                            (value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                GetX<GameController>(builder: (game) {
+                  return SizedBox(
+                      width: 120,
+                      child: Container(
+                          padding: const EdgeInsets.all(3.0),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.green)),
+                          child: Text('Points : ${game.pointsTurn.value}')));
+                }),
+              ],
+            ),
+            const DigitKeyboard(),
+            GetX<GameController>(
+                builder: (game) => ListTile(
+                    title: const Text('Bonus (+50)'),
+                    leading: Switch(
+                      value: game.bonus.value,
+                      onChanged: (value) => game.bonus.value = value,
+                    ))),
+            GetX<GameController>(
+                builder: (game) => ListTile(
+                    title: const Text('Malus fin de partie'),
+                    leading: Switch(
+                      value: game.malus.value,
+                      onChanged: (value) => game.malus.value = value,
+                    ))),
+          ]),
+        ));
   }
 }
 
@@ -135,7 +137,7 @@ class DigitKeyboard extends GameView {
               child: const Text('0'),
             ),
             OutlinedButton(
-              onPressed: () => game.pointsTurnControler.text = '',
+              onPressed: () => game.pointsTurn.value = '',
               child: const Text('C'),
             ),
           ],
@@ -145,7 +147,6 @@ class DigitKeyboard extends GameView {
   }
 
   void digit(int n) {
-    game.pointsTurnControler.text =
-        game.pointsTurnControler.text + n.toString();
+    game.pointsTurn.value = game.pointsTurn.value + n.toString();
   }
 }

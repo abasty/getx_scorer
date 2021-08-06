@@ -36,8 +36,8 @@ class GameController extends GetxController {
   /// [TurnScreen] state: Selected player.
   var playerTurn = 0.obs;
 
-  /// [TurnScreen] state: Points.
-  final TextEditingController pointsTurnControler = TextEditingController();
+  /// [TurnScreen] state: Points.obs
+  var pointsTurn = ''.obs;
 
   /// [TurnScreen] state: Bonus.
   var bonus = false.obs;

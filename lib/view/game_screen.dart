@@ -86,7 +86,7 @@ class ScoreTable extends StatelessWidget {
                 child: OutlinedButton(
                   onPressed: () {
                     game.playerTurn.value = p;
-                    game.pointsTurnControler.text = '';
+                    game.pointsTurn.value = '';
                     game.bonus.value = false;
                     game.malus.value = false;
                     Get.toNamed('/turn');
