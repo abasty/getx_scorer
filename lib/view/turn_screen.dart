@@ -97,9 +97,13 @@ class DigitKeyboard extends GameView {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 7; i <= 9; i++)
-              OutlinedButton(
-                onPressed: () => onDigitPressed(i),
-                child: Text(i.toString()),
+              SizedBox(
+                width: 48.0,
+                height: 48.0,
+                child: OutlinedButton(
+                  onPressed: () => onDigitPressed(i),
+                  child: Text(i.toString()),
+                ),
               ),
             const Spacer(),
             OutlinedButton(
@@ -112,12 +116,15 @@ class DigitKeyboard extends GameView {
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 4; i <= 6; i++)
-              OutlinedButton(
-                onPressed: () => onDigitPressed(i),
-                child: Text(i.toString()),
+              SizedBox(
+                width: 48.0,
+                height: 48.0,
+                child: OutlinedButton(
+                  onPressed: () => onDigitPressed(i),
+                  child: Text(i.toString()),
+                ),
               ),
           ],
         ),
@@ -125,33 +132,49 @@ class DigitKeyboard extends GameView {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 1; i <= 3; i++)
-              OutlinedButton(
-                onPressed: () => onDigitPressed(i),
-                child: Text(i.toString()),
+              SizedBox(
+                width: 48.0,
+                height: 48.0,
+                child: OutlinedButton(
+                  onPressed: () => onDigitPressed(i),
+                  child: Text(i.toString()),
+                ),
               )
           ],
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            OutlinedButton(
-              onPressed: () {
-                game.malus.value = !game.malus.value;
-                if (game.malus.isTrue) game.bonus.value = false;
-              },
-              child: const Text('+/-'),
+            SizedBox(
+              width: 48.0,
+              height: 48.0,
+              child: OutlinedButton(
+                onPressed: () {
+                  game.malus.value = !game.malus.value;
+                  if (game.malus.isTrue) game.bonus.value = false;
+                },
+                child: const Text('-'),
+              ),
             ),
-            OutlinedButton(
-              onPressed: () => onDigitPressed(0),
-              child: const Text('0'),
+            SizedBox(
+              width: 48.0,
+              height: 48.0,
+              child: OutlinedButton(
+                onPressed: () => onDigitPressed(0),
+                child: const Text('0'),
+              ),
             ),
-            OutlinedButton(
-              onPressed: () {
-                game.pointsTurn.value = '';
-                game.bonus.value = false;
-                game.malus.value = false;
-              },
-              child: const Text('C'),
+            SizedBox(
+              width: 48.0,
+              height: 48.0,
+              child: OutlinedButton(
+                onPressed: () {
+                  game.pointsTurn.value = '';
+                  game.bonus.value = false;
+                  game.malus.value = false;
+                },
+                child: const Text('C'),
+              ),
             ),
           ],
         ),
