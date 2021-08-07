@@ -39,25 +39,6 @@ class TurnDialog extends GameView {
             ),
           );
         }),
-        GetX<GameController>(builder: (game) {
-          return GestureDetector(
-            child: Container(
-              width: 64,
-              color: game.bonus.value ? Colors.green : Colors.white,
-              child: Container(
-                padding: const EdgeInsets.all(3.0),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey)),
-                child: Text(
-                  game.bonus.value ? '+50' : '+0',
-                  style: const TextStyle(fontSize: 20.0),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            onTap: () => game.bonus.value = !game.bonus.value,
-          );
-        }),
         const DigitKeyboard(),
       ]),
     );
@@ -66,6 +47,10 @@ class TurnDialog extends GameView {
   Text _pointText(GameController game) {
     var str = game.pointsTurn.value != '' ? game.pointsTurn.value : '0';
     if (str != '0' && game.malus.isTrue) str = '- $str';
+    if (game.bonus.isTrue && game.pointsTurn.value != '') {
+      var total = int.parse(game.pointsTurn.value) + 50;
+      str = '$str + 50 = $total';
+    }
     return Text(
       str,
       style: const TextStyle(fontSize: 20.0),
@@ -84,48 +69,63 @@ class DigitKeyboard extends GameView {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 4; i <= 6; i++)
               OutlinedButton(
-                onPressed: () => digit(i),
+                onPressed: () => onDigitPressed(i),
                 child: Text(i.toString()),
-              )
+              ),
+            const Spacer(),
+            OutlinedButton(
+              onPressed: () {
+                game.bonus.value = !game.bonus.value;
+                if (game.bonus.isTrue) game.malus.value = false;
+              },
+              child: const Text('bonus'),
+            )
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 7; i <= 9; i++)
               OutlinedButton(
-                onPressed: () => digit(i),
+                onPressed: () => onDigitPressed(i),
                 child: Text(i.toString()),
               )
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             for (int i = 1; i <= 3; i++)
               OutlinedButton(
-                onPressed: () => digit(i),
+                onPressed: () => onDigitPressed(i),
                 child: Text(i.toString()),
               )
           ],
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             OutlinedButton(
-              onPressed: () => game.malus.value = !game.malus.value,
+              onPressed: () {
+                game.malus.value = !game.malus.value;
+                if (game.malus.isTrue) game.bonus.value = false;
+              },
               child: const Text('+/-'),
             ),
             OutlinedButton(
-              onPressed: () => digit(0),
+              onPressed: () => onDigitPressed(0),
               child: const Text('0'),
             ),
             OutlinedButton(
-              onPressed: () => game.pointsTurn.value = '',
+              onPressed: () {
+                game.pointsTurn.value = '';
+                game.bonus.value = false;
+                game.malus.value = false;
+              },
               child: const Text('C'),
             ),
           ],
@@ -134,7 +134,7 @@ class DigitKeyboard extends GameView {
     );
   }
 
-  void digit(int n) {
+  void onDigitPressed(int n) {
     game.pointsTurn.value = game.pointsTurn.value + n.toString();
   }
 }
