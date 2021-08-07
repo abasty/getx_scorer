@@ -12,92 +12,64 @@ class TurnDialog extends GameView {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.person),
-            const SizedBox(width: 8),
-            GetX<GameController>(
-              builder: (game) => SizedBox(
-                width: 176,
-                child: DropdownButton<String>(
-                  isExpanded: true,
-                  value: game.players[game.playerTurn.value],
-                  onChanged: (String? newValue) =>
-                      game.playerTurn.value = game.players.indexOf(newValue!),
-                  items: game.players
-                      .map<DropdownMenuItem<String>>(
-                        (value) => DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        ),
-                      )
-                      .toList(),
+        GetX<GameController>(
+          builder: (game) => DropdownButton<String>(
+            isExpanded: true,
+            icon: const Icon(Icons.person),
+            value: game.players[game.playerTurn.value],
+            onChanged: (String? newValue) =>
+                game.playerTurn.value = game.players.indexOf(newValue!),
+            items: game.players
+                .map<DropdownMenuItem<String>>(
+                  (value) => DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+        GetX<GameController>(builder: (game) {
+          return SizedBox(
+            width: double.infinity,
+            child: Container(
+              padding: const EdgeInsets.all(3.0),
+              decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+              child: _pointText(game),
+            ),
+          );
+        }),
+        GetX<GameController>(builder: (game) {
+          return GestureDetector(
+            child: Container(
+              width: 64,
+              color: game.bonus.value ? Colors.green : Colors.white,
+              child: Container(
+                padding: const EdgeInsets.all(3.0),
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.grey)),
+                child: Text(
+                  game.bonus.value ? '+50' : '+0',
+                  style: const TextStyle(fontSize: 20.0),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
-          ],
-        ),
-        GetX<GameController>(builder: (game) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GetX<GameController>(builder: (game) {
-                return GestureDetector(
-                  child: Container(
-                    width: 64,
-                    color: game.malus.value ? Colors.red : Colors.white,
-                    child: Container(
-                      padding: const EdgeInsets.all(3.0),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Text(
-                        game.malus.value ? '-' : '+',
-                        style: const TextStyle(fontSize: 20.0),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  onTap: () => game.malus.value = !game.malus.value,
-                );
-              }),
-              SizedBox(
-                width: 96,
-                child: Container(
-                  padding: const EdgeInsets.all(3.0),
-                  decoration:
-                      BoxDecoration(border: Border.all(color: Colors.grey)),
-                  child: Text(
-                    game.pointsTurn.value != '' ? game.pointsTurn.value : '0',
-                    style: const TextStyle(fontSize: 20.0),
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ),
-              GetX<GameController>(builder: (game) {
-                return GestureDetector(
-                  child: Container(
-                    width: 64,
-                    color: game.bonus.value ? Colors.green : Colors.white,
-                    child: Container(
-                      padding: const EdgeInsets.all(3.0),
-                      decoration:
-                          BoxDecoration(border: Border.all(color: Colors.grey)),
-                      child: Text(
-                        game.bonus.value ? '+50' : '+0',
-                        style: const TextStyle(fontSize: 20.0),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  onTap: () => game.bonus.value = !game.bonus.value,
-                );
-              }),
-            ],
+            onTap: () => game.bonus.value = !game.bonus.value,
           );
         }),
         const DigitKeyboard(),
       ]),
+    );
+  }
+
+  Text _pointText(GameController game) {
+    var str = game.pointsTurn.value != '' ? game.pointsTurn.value : '0';
+    if (str != '0' && game.malus.isTrue) str = '- $str';
+    return Text(
+      str,
+      style: const TextStyle(fontSize: 20.0),
+      textAlign: TextAlign.end,
     );
   }
 }

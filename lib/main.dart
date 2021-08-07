@@ -5,8 +5,6 @@ import 'view/game_screen.dart';
 import 'view/new_screen.dart';
 import 'view_model/game.dart';
 
-import 'view/turn_screen.dart';
-
 Future<void> main() async {
   await GetStorage.init('game_app');
   Get.put(GameController(['Véro', 'Alain'], id: 'game_app'));
