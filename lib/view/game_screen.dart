@@ -99,28 +99,40 @@ class ScoreTable extends StatelessWidget {
                         return SizedBox(
                           width: (Get.width - 16.0) / game.columnCount,
                           height: 32,
-                          child: Row(
+                          child: Stack(
                             children: [
-                              const SizedBox(
-                                width: 8.0,
-                              ),
                               if (score != -1)
-                                Text(
-                                  delta == 0
-                                      ? 'passe'
-                                      : delta > 0
-                                          ? '+$delta'
-                                          : '$delta',
-                                  textAlign: TextAlign.start,
-                                  style: const TextStyle(
-                                      fontSize: 12.0,
-                                      fontStyle: FontStyle.italic),
+                                Positioned(
+                                  top: 4,
+                                  left: 4,
+                                  child: Text(
+                                    delta == 0
+                                        ? 'passe'
+                                        : delta > 0
+                                            ? '+$delta'
+                                            : '$delta',
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontStyle: FontStyle.italic),
+                                  ),
                                 ),
-                              const Spacer(),
-                              Text(
-                                '${score == -1 ? "..." : score}',
-                                style: const TextStyle(fontSize: 20.0),
-                                textAlign: TextAlign.end,
+                              Positioned(
+                                bottom: 4,
+                                right: 4,
+                                child: Text(
+                                  '${score == -1 ? "..." : score}',
+                                  style: const TextStyle(fontSize: 20.0),
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              Positioned(
+                                right: 0,
+                                child: Container(
+                                  height: 32,
+                                  width: 1,
+                                  color: Colors.grey[300],
+                                ),
                               ),
                             ],
                           ),
