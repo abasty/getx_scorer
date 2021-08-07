@@ -27,11 +27,6 @@ Future<void> main() async {
           page: () => const NewScreen(),
           transition: Transition.rightToLeft,
         ),
-        GetPage(
-          name: '/turn',
-          page: () => const TurnScreen(),
-          transition: Transition.rightToLeft,
-        ),
       ],
     ),
   );
