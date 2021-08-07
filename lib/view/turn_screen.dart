@@ -45,10 +45,6 @@ class TurnDialog extends GameView {
           alignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () => Get.back(),
-              child: const Text('ANNULER'),
-            ),
-            TextButton(
               onPressed: () {
                 game.doAddScore(game.playerTurn.value, 0);
                 Get.back();
@@ -100,7 +96,7 @@ class DigitKeyboard extends GameView {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            for (int i = 4; i <= 6; i++)
+            for (int i = 7; i <= 9; i++)
               OutlinedButton(
                 onPressed: () => onDigitPressed(i),
                 child: Text(i.toString()),
@@ -118,11 +114,11 @@ class DigitKeyboard extends GameView {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            for (int i = 7; i <= 9; i++)
+            for (int i = 4; i <= 6; i++)
               OutlinedButton(
                 onPressed: () => onDigitPressed(i),
                 child: Text(i.toString()),
-              )
+              ),
           ],
         ),
         Row(
