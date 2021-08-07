@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_scorer/view/turn_screen.dart';
 
 import '../view_model/game.dart';
 import 'game_view.dart';
@@ -61,7 +62,10 @@ class ScoreTable extends StatelessWidget {
                     game.pointsTurn.value = '';
                     game.bonus.value = false;
                     game.malus.value = false;
-                    Get.toNamed('/turn');
+                    Get.defaultDialog(
+                      title: 'Tour de jeu',
+                      content: const TurnDialog(),
+                    );
                   },
                   child: SizedBox(
                     width: double.infinity,
