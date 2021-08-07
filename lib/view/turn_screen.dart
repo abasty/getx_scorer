@@ -42,18 +42,29 @@ class TurnDialog extends GameView {
         const SizedBox(height: 8.0),
         const DigitKeyboard(),
         ButtonBar(
-          buttonMinWidth: 100.0,
+          alignment: MainAxisAlignment.spaceBetween,
           children: [
             TextButton(
-              onPressed: () {},
+              onPressed: () => Get.back(),
               child: const Text('ANNULER'),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                game.doAddScore(game.playerTurn.value, 0);
+                Get.back();
+              },
               child: const Text('PASSER'),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                var points = int.tryParse(game.pointsTurn.value);
+                if (points != null) {
+                  if (game.malus.value) points = -points;
+                  if (game.bonus.value) points += 50;
+                  game.doAddScore(game.playerTurn.value, points);
+                }
+                Get.back();
+              },
               child: const Text('VALIDER'),
             ),
           ],
