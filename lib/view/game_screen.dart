@@ -96,21 +96,6 @@ class ScoreTable extends StatelessWidget {
                       builder: (context) {
                         var score = game.getScore(p, row)[0];
                         var delta = game.getScore(p, row)[1];
-                        Widget text;
-                        if (delta != 0) {
-                          text = Text(
-                            '${score < 0 ? "-" : score}',
-                            style: const TextStyle(fontSize: 20.0),
-                            textAlign: TextAlign.end,
-                          );
-                        } else {
-                          text = Text(
-                            score == -1 ? '...' : 'passe',
-                            style: const TextStyle(
-                                fontSize: 12.0, fontStyle: FontStyle.italic),
-                            textAlign: TextAlign.end,
-                          );
-                        }
                         return SizedBox(
                           width: (Get.width - 16.0) / game.columnCount,
                           height: 32,
@@ -119,16 +104,24 @@ class ScoreTable extends StatelessWidget {
                               const SizedBox(
                                 width: 8.0,
                               ),
-                              if (delta != 0)
+                              if (score != -1)
                                 Text(
-                                  delta >= 0 ? '+$delta' : '-$delta',
+                                  delta == 0
+                                      ? 'passe'
+                                      : delta > 0
+                                          ? '+$delta'
+                                          : '$delta',
                                   textAlign: TextAlign.start,
                                   style: const TextStyle(
                                       fontSize: 12.0,
                                       fontStyle: FontStyle.italic),
                                 ),
                               const Spacer(),
-                              text,
+                              Text(
+                                '${score == -1 ? "..." : score}',
+                                style: const TextStyle(fontSize: 20.0),
+                                textAlign: TextAlign.end,
+                              ),
                             ],
                           ),
                         );
