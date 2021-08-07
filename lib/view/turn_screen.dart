@@ -39,7 +39,25 @@ class TurnDialog extends GameView {
             ),
           );
         }),
+        const SizedBox(height: 8.0),
         const DigitKeyboard(),
+        ButtonBar(
+          buttonMinWidth: 100.0,
+          children: [
+            TextButton(
+              onPressed: () {},
+              child: const Text('ANNULER'),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text('PASSER'),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text('VALIDER'),
+            ),
+          ],
+        ),
       ]),
     );
   }
