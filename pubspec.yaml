@@ -22,6 +22,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   fonts:
-    - family: lcd
+    - family: Segment14
       fonts:
-        - asset: assets/fonts/repet___.ttf
+        - asset: assets/fonts/Segment14.otf

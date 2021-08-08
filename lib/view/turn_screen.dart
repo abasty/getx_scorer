@@ -73,14 +73,14 @@ class TurnDialog extends GameView {
       width: double.infinity,
       child: Container(
         padding: const EdgeInsets.all(4.0),
-        color: Colors.black,
+        color: Colors.black12,
         child: Text(
           str,
           style: const TextStyle(
             fontSize: 20.0,
-            // fontWeight: FontWeight.bold,
-            color: Colors.greenAccent,
-            fontFamily: 'lcd',
+            //fontWeight: FontWeight.bold,
+            color: Colors.black,
+            fontFamily: 'Segment14',
           ),
           textAlign: TextAlign.end,
         ),
