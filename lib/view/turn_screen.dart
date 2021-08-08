@@ -34,7 +34,9 @@ class TurnDialog extends GameView {
             width: double.infinity,
             child: Container(
               padding: const EdgeInsets.all(3.0),
-              decoration: BoxDecoration(border: Border.all(color: Colors.grey)),
+              decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  color: Colors.grey[300]),
               child: _pointText(game),
             ),
           );
@@ -69,7 +71,7 @@ class TurnDialog extends GameView {
     );
   }
 
-  Text _pointText(GameController game) {
+  Widget _pointText(GameController game) {
     var str = game.pointsTurn.value != '' ? game.pointsTurn.value : '0';
     if (str != '0' && game.malus.isTrue) str = '- $str';
     if (game.bonus.isTrue && game.pointsTurn.value != '') {
