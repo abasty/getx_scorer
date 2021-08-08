@@ -69,21 +69,50 @@ class TurnDialog extends GameView {
       var total = int.parse(game.pointsTurn.value) + 50;
       str = '$str+50=$total';
     }
-    return SizedBox(
-      width: double.infinity,
-      child: Container(
-        padding: const EdgeInsets.all(4.0),
-        color: Colors.black12,
-        child: Text(
-          str,
-          style: const TextStyle(
-            fontSize: 20.0,
-            //fontWeight: FontWeight.bold,
-            color: Colors.black,
-            fontFamily: 'Segment14',
+    return Container(
+      color: Colors.black12,
+      height: 32,
+      child: Stack(
+        children: [
+          if (game.bonus.value)
+            const Positioned(
+              left: 2,
+              top: 2,
+              child: Text(
+                '+50',
+                style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          if (game.malus.value)
+            const Positioned(
+              left: 24,
+              top: 2,
+              child: Text(
+                'neg',
+                style: TextStyle(
+                  fontSize: 10.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: Text(
+              str,
+              style: const TextStyle(
+                fontSize: 20.0,
+                //fontWeight: FontWeight.bold,
+                color: Colors.black,
+                fontFamily: 'Segment14',
+              ),
+              textAlign: TextAlign.end,
+            ),
           ),
-          textAlign: TextAlign.end,
-        ),
+        ],
       ),
     );
   }
