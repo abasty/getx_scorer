@@ -103,6 +103,20 @@ class DigitKeyboard extends GameView {
             for (int i = 7; i <= 9; i++) _digitButton(i),
             const Spacer(),
             _rectButton(
+              text: 'AC',
+              onPressed: () {
+                game.pointsTurn.value = '';
+                game.bonus.value = false;
+                game.malus.value = false;
+              },
+            ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            for (int i = 4; i <= 6; i++) _digitButton(i),
+            const Spacer(),
+            _rectButton(
               text: '+50',
               onPressed: () {
                 game.bonus.value = !game.bonus.value;
@@ -113,32 +127,24 @@ class DigitKeyboard extends GameView {
         ),
         Row(
           children: <Widget>[
-            for (int i = 4; i <= 6; i++) _digitButton(i),
-          ],
-        ),
-        Row(
-          children: <Widget>[
             for (int i = 1; i <= 3; i++) _digitButton(i),
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            _squareButton(
+            const Spacer(),
+            _rectButton(
               text: '+/-',
               onPressed: () {
                 game.malus.value = !game.malus.value;
                 if (game.malus.isTrue) game.bonus.value = false;
               },
             ),
-            _digitButton(0),
-            _squareButton(
-              text: 'C',
-              onPressed: () {
-                game.pointsTurn.value = '';
-                game.bonus.value = false;
-                game.malus.value = false;
-              },
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            const SizedBox(
+              width: 48.0,
+              height: 48.0,
             ),
+            _digitButton(0),
           ],
         ),
       ],
