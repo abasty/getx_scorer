@@ -30,16 +30,7 @@ class TurnDialog extends GameView {
           ),
         ),
         GetX<GameController>(builder: (game) {
-          return SizedBox(
-            width: double.infinity,
-            child: Container(
-              padding: const EdgeInsets.all(3.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  color: Colors.grey[300]),
-              child: _pointText(game),
-            ),
-          );
+          return _pointText(game);
         }),
         const SizedBox(height: 8.0),
         const DigitKeyboard(),
@@ -73,15 +64,27 @@ class TurnDialog extends GameView {
 
   Widget _pointText(GameController game) {
     var str = game.pointsTurn.value != '' ? game.pointsTurn.value : '0';
-    if (str != '0' && game.malus.isTrue) str = '- $str';
+    if (str != '0' && game.malus.isTrue) str = '-$str';
     if (game.bonus.isTrue && game.pointsTurn.value != '') {
       var total = int.parse(game.pointsTurn.value) + 50;
-      str = '$str + 50 = $total';
+      str = '$str+50=$total';
     }
-    return Text(
-      str,
-      style: const TextStyle(fontSize: 20.0),
-      textAlign: TextAlign.end,
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        color: Colors.black,
+        child: Text(
+          str,
+          style: const TextStyle(
+            fontSize: 20.0,
+            // fontWeight: FontWeight.bold,
+            color: Colors.greenAccent,
+            fontFamily: 'lcd',
+          ),
+          textAlign: TextAlign.end,
+        ),
+      ),
     );
   }
 }
@@ -121,7 +124,7 @@ class DigitKeyboard extends GameView {
         Row(
           children: <Widget>[
             _squareButton(
-              text: '-',
+              text: '+/-',
               onPressed: () {
                 game.malus.value = !game.malus.value;
                 if (game.malus.isTrue) game.bonus.value = false;

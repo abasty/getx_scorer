@@ -21,3 +21,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: lcd
+      fonts:
+        - asset: assets/fonts/repet___.ttf
