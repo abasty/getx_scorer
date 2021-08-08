@@ -98,7 +98,7 @@ class DigitKeyboard extends GameView {
             for (int i = 7; i <= 9; i++) _digitButton(i),
             const Spacer(),
             _rectButton(
-              text: 'bonus',
+              text: '+50',
               onPressed: () {
                 game.bonus.value = !game.bonus.value;
                 if (game.bonus.isTrue) game.malus.value = false;
