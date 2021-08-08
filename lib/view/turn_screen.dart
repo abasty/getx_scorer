@@ -94,87 +94,45 @@ class DigitKeyboard extends GameView {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            for (int i = 7; i <= 9; i++)
-              SizedBox(
-                width: 48.0,
-                height: 48.0,
-                child: OutlinedButton(
-                  onPressed: () => onDigitPressed(i),
-                  child: Text(i.toString()),
-                ),
-              ),
+            for (int i = 7; i <= 9; i++) _digitButton(i),
             const Spacer(),
-            OutlinedButton(
+            _rectButton(
+              text: 'bonus',
               onPressed: () {
                 game.bonus.value = !game.bonus.value;
                 if (game.bonus.isTrue) game.malus.value = false;
               },
-              child: const Text('bonus'),
-            )
-          ],
-        ),
-        Row(
-          children: <Widget>[
-            for (int i = 4; i <= 6; i++)
-              SizedBox(
-                width: 48.0,
-                height: 48.0,
-                child: OutlinedButton(
-                  onPressed: () => onDigitPressed(i),
-                  child: Text(i.toString()),
-                ),
-              ),
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            for (int i = 1; i <= 3; i++)
-              SizedBox(
-                width: 48.0,
-                height: 48.0,
-                child: OutlinedButton(
-                  onPressed: () => onDigitPressed(i),
-                  child: Text(i.toString()),
-                ),
-              )
-          ],
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            SizedBox(
-              width: 48.0,
-              height: 48.0,
-              child: OutlinedButton(
-                onPressed: () {
-                  game.malus.value = !game.malus.value;
-                  if (game.malus.isTrue) game.bonus.value = false;
-                },
-                child: const Text('-'),
-              ),
             ),
-            SizedBox(
-              width: 48.0,
-              height: 48.0,
-              child: OutlinedButton(
-                onPressed: () => onDigitPressed(0),
-                child: const Text('0'),
-              ),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            for (int i = 4; i <= 6; i++) _digitButton(i),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            for (int i = 1; i <= 3; i++) _digitButton(i),
+          ],
+        ),
+        Row(
+          children: <Widget>[
+            _squareButton(
+              text: '-',
+              onPressed: () {
+                game.malus.value = !game.malus.value;
+                if (game.malus.isTrue) game.bonus.value = false;
+              },
             ),
-            SizedBox(
-              width: 48.0,
-              height: 48.0,
-              child: OutlinedButton(
-                onPressed: () {
-                  game.pointsTurn.value = '';
-                  game.bonus.value = false;
-                  game.malus.value = false;
-                },
-                child: const Text('C'),
-              ),
+            _digitButton(0),
+            _squareButton(
+              text: 'C',
+              onPressed: () {
+                game.pointsTurn.value = '';
+                game.bonus.value = false;
+                game.malus.value = false;
+              },
             ),
           ],
         ),
@@ -182,7 +140,35 @@ class DigitKeyboard extends GameView {
     );
   }
 
-  void onDigitPressed(int n) {
-    game.pointsTurn.value = game.pointsTurn.value + n.toString();
+  Widget _squareButton(
+      {required String text, required void Function() onPressed}) {
+    return SizedBox(
+      width: 48.0,
+      height: 48.0,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+
+  Widget _rectButton(
+      {required String text, required void Function() onPressed}) {
+    return SizedBox(
+      width: 64.0,
+      height: 48.0,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        child: Text(text),
+      ),
+    );
+  }
+
+  Widget _digitButton(int n) {
+    return _squareButton(
+      text: n.toString(),
+      onPressed: () =>
+          game.pointsTurn.value = game.pointsTurn.value + n.toString(),
+    );
   }
 }
