@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 class GameController extends GetxController {
   static const _tableKey = 'table';
   static const _playersKey = 'players';
+  static const _cancelKey = 'cancel';
 
   /// The [id] of the game.
   final String? id;
@@ -163,12 +164,26 @@ class GameController extends GetxController {
       tableInt = players.map((e) => <int>[]).toList();
     }
     _table.addAll(tableInt);
+
+    // Read cancel list
+    _cancelList.clear();
+    List<int> cancelInt;
+    var cancelRaw = _storage!.read(_cancelKey);
+    if (cancelRaw is List) {
+      cancelInt = cancelRaw.map((player) {
+        return player as int;
+      }).toList();
+    } else {
+      cancelInt = [];
+    }
+    _cancelList.addAll(cancelInt);
   }
 
   /// Write game state to persistent storage and update UI
   void _writeAndUpdate({bool writePlayers = false}) {
     _storage?.write(_tableKey, _table);
     if (writePlayers) _storage?.write(_playersKey, players);
+    _storage?.write(_cancelKey, _cancelList);
     update();
   }
 }
