@@ -70,10 +70,22 @@ class TurnDialog extends GameView {
       str = '$str+50=$total';
     }
     return Container(
-      color: Colors.black12,
+      color: Colors.grey.shade100,
       height: 32,
       child: Stack(
         children: [
+          Positioned(
+            left: 2,
+            top: 2,
+            child: Text(
+              '+50',
+              style: TextStyle(
+                fontSize: 10.0,
+                color: Colors.grey.shade300,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
           if (game.bonus.value)
             const Positioned(
               left: 2,
@@ -86,6 +98,18 @@ class TurnDialog extends GameView {
                 ),
               ),
             ),
+          Positioned(
+            left: 24,
+            top: 2,
+            child: Text(
+              'neg',
+              style: TextStyle(
+                fontSize: 10.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade300,
+              ),
+            ),
+          ),
           if (game.malus.value)
             const Positioned(
               left: 24,
@@ -102,10 +126,24 @@ class TurnDialog extends GameView {
             right: 4,
             bottom: 4,
             child: Text(
+              '00000000000000',
+              style: TextStyle(
+                fontSize: 20.0,
+                //fontWeight: FontWeight.bold,
+                color: Colors.grey.shade300,
+                fontFamily: 'Segment14',
+              ),
+              textAlign: TextAlign.end,
+            ),
+          ),
+          Positioned(
+            right: 4,
+            bottom: 4,
+            child: Text(
               str,
               style: const TextStyle(
                 fontSize: 20.0,
-                //fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold,
                 color: Colors.black,
                 fontFamily: 'Segment14',
               ),
