@@ -73,7 +73,7 @@ class GameController extends GetxController {
     var length = list.length;
     list.add(length == 0 ? score : list[length - 1] + score);
     _writeAndUpdate();
-    SchedulerBinding.instance!.addPostFrameCallback((_) =>
+    SchedulerBinding.instance.addPostFrameCallback((_) =>
         scrollController.jumpTo(scrollController.position.maxScrollExtent));
   }
 

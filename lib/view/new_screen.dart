@@ -45,6 +45,13 @@ class NewScreen extends StatelessWidget {
                           index++)
                         Dismissible(
                           key: Key(game.playersNew[index]),
+                          background: Container(
+                            color: Colors.red,
+                            child: const Center(child: Text('Supprimer')),
+                          ),
+                          onDismissed: (dir) {
+                            game.doRemovePlayer(index);
+                          },
                           child: ListTile(
                             title: Text(game.playersNew[index]),
                             trailing: Padding(
@@ -58,13 +65,6 @@ class NewScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          background: Container(
-                            color: Colors.red,
-                            child: const Center(child: Text('Supprimer')),
-                          ),
-                          onDismissed: (dir) {
-                            game.doRemovePlayer(index);
-                          },
                         ),
                     ],
                   );
